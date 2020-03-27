@@ -1,6 +1,6 @@
 <link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<nav class="navbar shadow-sm navbar-transparent navbar-expand-lg navbar-relative" style="border-bottom: 0.5px  margin-top: -7px; z-index: 1;">
   <a class="navbar-brand" href="#">NBA Stats</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -14,21 +14,22 @@
   </div>
 </nav>
 
+<br><br> 
+<br><br> 
 <div class="container">
   <div class="row">
     <div class="col-sm">
-      <center><img src="https://i.imgur.com/LByYUAX.png" style="width:500px;height:500px;"  /></a></center>
+      <center><img src="https://i.imgur.com/FiAyjEj.png" style="width:900px;height:375px;"  /></a></center>
     </div>
   </div>
 </div>
 
-
-<div class ="row">
-  <div class="col">
-    <center>
-      <form>
-        <input type="text" class="form-control shadow-sm" placeholder="Search" style="width: 50%; border-top-right-radius: 30px; border-bottom-right-radius:30px; border-top-left-radius: 30px; border-bottom-left-radius:30px; border: solid space#e3e3e3 1px;">
-      </form>
-    </center>
+<center>
+<div class="input-group mb-3" style = "width:50%">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1" style = "border-top-left-radius: 30px; border-bottom-left-radius:30px;" ><i class="fa fa-search"></i></span>
   </div>
+  <input type="text" class="form-control" placeholder="Search"  style="width: 50%; border-top-right-radius: 30px; border-bottom-right-radius:30px; 
+  border: solid space#e3e3e3 1px;">
 </div>
+</center>
