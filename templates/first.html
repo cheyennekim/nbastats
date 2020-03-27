@@ -1,12 +1,38 @@
-<html>
-  {% block content %}
-    <ul>
-      {% for player in players %}
-      <li>{{player.name}}</li>
-      {% endfor %}
-    </ul>
-    <hr/>
-    <p>{{players|length}} player{{players|length}}
-      found in the database.</p>
-    {% endblock %}
-</html>
+<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">NBA Stats</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="#">Teams</a>
+      <a class="nav-item nav-link" href="/">Players</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <center><img src="https://i.imgur.com/8GoRrlF.png" style="width:500px;height:500px;" class="center"></center>
+    </div>
+  </div>
+</div>
+
+
+<div class ="container-fluid">
+<div class ="row text-center">
+<div class="col ml-auto mr-auto">
+<form>
+  <div class="form-row">
+    <div class="col-4">
+      <input type="text" class="form-control" placeholder="Search">
+    </div>
+  </div>
+</form>
+</div>
+</div>
+</div>

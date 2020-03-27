@@ -1,7 +1,9 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
+Bootstrap(app)
 app.secret_key = 's3cr3t'
 app.config.from_object('config')
 db = SQLAlchemy(app, session_options={'autocommit': False})
