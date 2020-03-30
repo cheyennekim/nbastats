@@ -13,6 +13,11 @@ def all_players():
      players = models.Player.query.all()
      return render_template('first.html', players=players)
 
+@app.route('/allplayers')
+def allplayer_page():
+    players = models.Player.query.all()
+    return render_template('allplayers.html', players=players)
+
 @app.route('/<some_player>')
 def some_player_page(some_player):
 	Spec_player = models.Player.query.filter_by(name=some_player).first()
