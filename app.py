@@ -15,7 +15,8 @@ def all_players():
 
 @app.route('/allplayers')
 def allplayer_page():
-    players = models.Player.query.all()
+    players = models.IsOn.query.join(models.Player, models.IsOn.player == models.Player.name)\
+    	.add_columns(models.IsOn.player, models.IsOn.team, models.Player.age)
     return render_template('allplayers.html', players=players)
 
 @app.route('/<some_player>')
