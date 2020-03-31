@@ -1,6 +1,82 @@
 <html>
+
 <header><title>{{player.name}}</title></header>
+<style> 
+        h1 { 
+            color:#799000; 
+            font-size:46px; 
+        } 
+        p { 
+            font-size:17px; 
+            margin-top:-25px; 
+            margin-left:15px; 
+        } 
+
+        table, th, td { 
+            border: 1px solid black; 
+        } 
+        th, td { 
+            padding: 10px; 
+        } 
+
+        table { 
+            width: 100%; 
+            background-color: #00FFFF; 
+        } 
+        </style>
 <body>
-{{player.name}}
+	<h1 style="text-align:center;">{{player.name}}</h1>
+	<p class = "text-capitalize"> {{type}} </p>
+	
+	<table style = "width:70%">
+		<tr> 
+			<th> Min </th>
+			<th> PPG </th>
+			<th> APG </th>
+			<th> FG% </th>
+			<th> 3FG% </th>
+			<th> Orpg </th>
+		</tr>
+		<tr>
+			<td> {{player.minutes}} </td>
+			<td> {{player.ppg}} </td>
+			<td> {{player.apg}} </td>
+			<td> {{player.fgper}} </td>
+			<td> {{player.THptper}} </td>
+			<td> {{player.orpg}} </td>
+		</tr>
+	</table>
+
+		<!-- ppg: {{player.ppg}}<br> -->
+
+	<!-- {% if player.ppg > 12.0 %}
+	<h3>this player is a LETHAL scorer</h3>
+	{% else %}
+	<h3>this player is NOT a scorer</h3>
+	{% endif %} -->
+
+<!-- 	<hr>
+		<abbrev title = "assists per game"> apg: </abbrev> {{player.apg}}<br>
+	<hr>
+		tov: {{player.tov}}<br>
+	<hr>
+		fg%: {{player.fgper}}<br>
+	<hr>
+		ft%: {{player.ftper}}<br>
+	<hr>
+		3pt%: {{player.THptper}}
+	<hr>
+		Opp 3pt%: {{player.THptperD}}<br>
+	<hr>
+		Catch-and-Shoot ppg: {{player1.casPts}}<br>
+	<hr>
+		Opp Diff fg%: {{pDef.fgDiffPer}}<br>
+	<hr>
+	</p> -->
+<!-- 	<br> -->
+	<br>
+	<a href="http://127.0.0.1:5000/"> 
+        Home Page 
+    </a><br> 
 </body>
 </html>
