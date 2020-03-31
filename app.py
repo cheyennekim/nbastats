@@ -21,7 +21,17 @@ def allplayer_page():
 
 @app.route('/<some_player>')
 def some_player_page(some_player):
-	Spec_player = models.Player.query.filter_by(name=some_player).first()
-	# Spec_player_OffStat = models.OffStat.query.filter_by(name=some_player).first()
-	return render_template('player.html', player = Spec_player)
+	PlayerAdv = models.PlayerAdvOff.query.filter_by(name=some_player).first()
+	Player = models.PlayerOff.query.filter_by(name=some_player).first()
+	pD = models.PlayerDef.query.filter_by(name=some_player).first()
 
+	string = Player.tester()
+
+	if Player.THptAr > 60.0:
+		type1 = "yes"
+	else:
+		type1 = "Two Point Specialist"
+
+
+	return render_template('player.html', player = Player, player1 = PlayerAdv, pDef = pD, str = string, type = type1)
+	# return render_template('player.html')
