@@ -1,13 +1,20 @@
 from sqlalchemy import sql, orm
 from app import db
+import numpy as np
+from statistics import mean 
+from scipy import stats
 
 
 class Player(db.Model):
     __tablename__ = 'players'
+    __table_args__ = {'extend_existing': True}
     name = db.Column('name', db.String(20), primary_key=True)
+
+
 
 class PlayerOff(db.Model):
     __tablename__ = 'offStat'
+    __table_args__ = {'extend_existing': True}
     name = db.Column('player', db.String(20), db.ForeignKey('player'), primary_key=True)
     ppg = db.Column('ppg', db.Float)
     apg = db.Column('apg', db.Float)
@@ -39,8 +46,10 @@ class PlayerOff(db.Model):
     		print("less")
     		return "less"
 
+
 class PlayerAdvOff(db.Model):
     __tablename__ = 'advOff'
+    __table_args__ = {'extend_existing': True}
     name = db.Column('player', db.String(20), db.ForeignKey('player'), primary_key=True)
     drPts = db.Column('drPts', db.Float)
     drPer = db.Column('drPer', db.Float)
@@ -55,6 +64,7 @@ class PlayerAdvOff(db.Model):
 
 class PlayerDef(db.Model):
     __tablename__ = 'defStat'
+    __table_args__ = {'extend_existing': True}
     name = db.Column('player', db.String(20), db.ForeignKey('player'), primary_key=True)
     drpg = db.Column('drpg', db.Float)
     drebPer = db.Column('drebPer', db.Float)
@@ -68,4 +78,99 @@ class PlayerDef(db.Model):
     twenFourPer = db.Column('TwenFourPer', db.Float)
     gp = db.Column('gp', db.Float)
     fgDiffPer = db.Column('fgDiffPer', db.Float)
+    def __repr__(self):
+        return self.name
+
+
+def games(playername):
+    defPlayer = PlayerDef.query.filter_by(name=playername).first()
+    return defPlayer.gp
+
+def ppg(percentile):
+    lst = []
+    lstPts = []
+    lstNms = []
+    dict2 = {}
+    pts=0
+    denom=0
+    off1 = PlayerOff.query.all()
+    def1 = PlayerDef.query.all()
+    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
+    off2 = PlayerAdvOff.query
+    for y in def2:
+        lst.append(y.name)
+
+    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
+    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
+    for x in q1:
+        lstPts.append(x.ppg)
+        lstNms.append(x.name)
+    # for player in q1: 
+    #     pts+=player.ppg
+    #     denom+=1
+    return np.percentile(lstPts, percentile)
+
+def avg(att):
+    lst = []
+    lstAtt = []
+    lstNms = []
+    dict2 = {}
+    pts=0
+    denom=0
+    off1 = PlayerOff.query.all()
+    def1 = PlayerDef.query.all()
+    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
+    off2 = PlayerAdvOff.query
+    for y in def2:
+        lst.append(y.name)
+
+    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
+    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
+    for x in q1:
+        lstAtt.append(x.att)
+        lstNms.append(x.name)
+    # for player in q1: 
+    #     pts+=player.ppg
+    #     denom+=1
+    return mean(lstAtt)
+
+def ppgPer(pt):
+    lst = []
+    lstPts = []
+    lstNms = []
+    dict2 = {}
+
+    Ans = []
+
+    off1 = PlayerOff.query.all()
+    def1 = PlayerDef.query.all()
+    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
     
+    
+    result = [r.drPts for r in PlayerAdvOff.query]
+    for x in result:
+        print(x)
+
+    for y in def2:
+        lst.append(y.name)
+
+    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
+    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
+    for x in q1:
+        lstPts.append(x.ppg)
+
+    Ans.append(stats.percentileofscore(lstPts, pt))
+
+
+print(ppgPer(28))
+
+
+       
+    
+
+
+
+
+
+
+        
