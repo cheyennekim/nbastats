@@ -19,6 +19,11 @@ def allplayer_page():
     	.add_columns(models.IsOn.player, models.IsOn.team, models.Player.age)
     return render_template('allplayers.html', players=players)
 
+@app.route('/allteams')
+def allteams_page():
+	teams = models.Teams.query.all()
+	return render_template('allteams.html', teams=teams)
+
 @app.route('/<some_player>')
 def some_player_page(some_player):
 	PlayerAdv = models.PlayerAdvOff.query.filter_by(name=some_player).first()
