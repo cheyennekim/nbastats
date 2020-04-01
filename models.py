@@ -12,6 +12,16 @@ class IsOn(db.Model):
 	player = db.Column('player', db.String(20), primary_key=True)
 	team = db.Column('team', db.String(20),primary_key=True)
 
+class Teams(db.Model):
+	__tablename__ = 'teams'
+	teamname = db.Column('teamname', db.String(50), primary_key=True) 
+	teamabv = db.Column('teamabv', db.String(50))
+
+class CoachedBy(db.Model):
+	__tablename__ = "coachedby"
+	coach = db.Column('coach', db.String(40), primary_key=True)
+	team = db.Column('team', db.String(20), primary_key=True)
+
 class PlayerOff(db.Model):
     __tablename__ = 'offStat'
     name = db.Column('player', db.String(20), db.ForeignKey('player'), primary_key=True)
