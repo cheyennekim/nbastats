@@ -21,7 +21,8 @@ def allplayer_page():
 
 @app.route('/allteams')
 def allteams_page():
-	teams = models.Teams.query.all()
+	teams = models.Teams.query.join(models.CoachedBy, models.Teams.teamabv == models.CoachedBy.team)\
+		.add_columns(models.Teams.teamname, models.Teams.teamabv, models.CoachedBy.coach)
 	return render_template('allteams.html', teams=teams)
 
 @app.route('/<some_player>')

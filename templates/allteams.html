@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>All Active NBA Players</title>
+  <title>All Active NBA Teams</title>
 
 
 
@@ -129,20 +129,12 @@
 
 
 
-
-
-
-            <!-- <a class="nav-link js-scroll-trigger" href="{{url_for('all_players')}}">NBA Stats Home</a>
-          </li> -->
-          
-
-
-
   <table class ="player-table">
     <thead>
       <tr>
         <th>Team</th>
         <th>Team Abv</th>
+        <th>Coach</th>
       </tr>
     </thead>
     <tbody>
@@ -150,6 +142,7 @@
       <tr>
         <td>{{team.teamname}}</td>
         <td>{{team.teamabv}}</td>
+        <td>{{team.coach}}</td>
       </tr>
       {% endfor %}
     </tbody>
