@@ -1,13 +1,37 @@
 from sqlalchemy import sql, orm
 from app import db
+import numpy as np
+from statistics import mean, median
+from scipy import stats
+import difflib
 
 
 class Player(db.Model):
     __tablename__ = 'players'
+    __table_args__ = {'extend_existing': True}
     name = db.Column('name', db.String(20), primary_key=True)
+    age = db.Column('age', db.Integer)
+
+class IsOn(db.Model):
+	__tablename__ = 'ison'
+	player = db.Column('player', db.String(20), primary_key=True)
+	team = db.Column('team', db.String(20),primary_key=True)
+
+class Teams(db.Model):
+	__tablename__ = 'teams'
+	teamname = db.Column('teamname', db.String(50), primary_key=True) 
+	teamabv = db.Column('teamabv', db.String(50))
+
+class CoachedBy(db.Model):
+	__tablename__ = "coachedby"
+	coach = db.Column('coach', db.String(40), primary_key=True)
+	team = db.Column('team', db.String(20), primary_key=True)
+
+
 
 class PlayerOff(db.Model):
     __tablename__ = 'offStat'
+    __table_args__ = {'extend_existing': True}
     name = db.Column('player', db.String(20), db.ForeignKey('player'), primary_key=True)
     ppg = db.Column('ppg', db.Float)
     apg = db.Column('apg', db.Float)
@@ -39,8 +63,10 @@ class PlayerOff(db.Model):
     		print("less")
     		return "less"
 
+
 class PlayerAdvOff(db.Model):
     __tablename__ = 'advOff'
+    __table_args__ = {'extend_existing': True}
     name = db.Column('player', db.String(20), db.ForeignKey('player'), primary_key=True)
     drPts = db.Column('drPts', db.Float)
     drPer = db.Column('drPer', db.Float)
@@ -55,6 +81,7 @@ class PlayerAdvOff(db.Model):
 
 class PlayerDef(db.Model):
     __tablename__ = 'defStat'
+    __table_args__ = {'extend_existing': True}
     name = db.Column('player', db.String(20), db.ForeignKey('player'), primary_key=True)
     drpg = db.Column('drpg', db.Float)
     drebPer = db.Column('drebPer', db.Float)
@@ -68,4 +95,183 @@ class PlayerDef(db.Model):
     twenFourPer = db.Column('TwenFourPer', db.Float)
     gp = db.Column('gp', db.Float)
     fgDiffPer = db.Column('fgDiffPer', db.Float)
+    def __repr__(self):
+        return self.name
+
+
+def games(playername):
+    defPlayer = PlayerDef.query.filter_by(name=playername).first()
+    return defPlayer.gp
+
+def ppg(percentile):
+    lst = []
+    lstPts = []
+    lstNms = []
+    dict2 = {}
+    pts=0
+    denom=0
+    off1 = PlayerOff.query.all()
+    def1 = PlayerDef.query.all()
+    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
+    off2 = PlayerAdvOff.query
+    for y in def2:
+        lst.append(y.name)
+
+    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
+    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
+    for x in q1:
+        lstPts.append(x.ppg)
+        lstNms.append(x.name)
+    # for player in q1: 
+    #     pts+=player.ppg
+    #     denom+=1
+    return np.percentile(lstPts, percentile)
+
+def avg(att):
+    lst = []
+    lstAtt = []
+    lstNms = []
+    dict2 = {}
+    pts=0
+    denom=0
+    off1 = PlayerOff.query.all()
+    def1 = PlayerDef.query.all()
+    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
+    off2 = PlayerAdvOff.query
+    for y in def2:
+        lst.append(y.name)
+
+    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
+    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
+    for x in q1:
+        lstAtt.append(x.att)
+        lstNms.append(x.name)
+    # for player in q1: 
+    #     pts+=player.ppg
+    #     denom+=1
+    return mean(lstAtt)
+
+def percentile(playerName, statDex):
+    defGP = []
+    #list of players in defStat with minimum games played: 5
+    playDict = {}
+    defDict = {}
+    off2Dict = {}
+    lstPts = []
+    lstApg = []
+    lstTov = []
+    lstOrpg = []
+    lstfgper = []
+    lstMinutes = []
+    lstTHptAr = []
+    lstTWptmr = []
+    lstTHptr = []
+    lstFbpsr = []
+    lst = []
+
+    Ans = []
+
+    off = PlayerOff.query.all()
+    #all playerOff instances in offStat table
+    def1 = PlayerDef.query.all()
+    #all playerDef instances in defStat table
+    minGP = PlayerDef.query.filter(PlayerDef.gp>8).all()
+    #all playerDef instances in defStat table and > 4 gp
+    off2 = PlayerAdvOff.query.all()
+    #all playerAdvOff instances in advOff table
+
+    for r in off:
+        playDict[r.name] = [r.ppg, r.apg, r.tov, r.orpg, r.fgper, r.minutes, r.THptAr, r.TWptmr, r.THptr, r.fbpsr, r.ftr, r.pipr, r.fgmUass, r.THptAtt, r.THptper, r.ftAtt, r.ftper, r.THptperD]
     
+   
+    for p in off2:
+        if p.name in playDict:
+            playDict[p.name].append(p.drPts) 
+            playDict[p.name].append(p.drPer)
+            playDict[p.name].append(p.casPts)  
+            playDict[p.name].append(p.casPer) 
+            playDict[p.name].append(p.pullPts) 
+            playDict[p.name].append(p.pullPer) 
+            playDict[p.name].append(p.postPts)
+            playDict[p.name].append(p.postPer)
+            playDict[p.name].append(p.elbPts)  
+            playDict[p.name].append(p.elbPer)  
+        else:
+            playDict[p.name] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            playDict[p.name].append(p.drPts) 
+            playDict[p.name].append(p.drPer)
+            playDict[p.name].append(p.casPts)  
+            playDict[p.name].append(p.casPer) 
+            playDict[p.name].append(p.pullPts) 
+            playDict[p.name].append(p.pullPer) 
+            playDict[p.name].append(p.postPts)
+            playDict[p.name].append(p.postPer)
+            playDict[p.name].append(p.elbPts)  
+            playDict[p.name].append(p.elbPer)  
+
+    for k in def1:
+        if k.name in playDict:
+            playDict[k.name].append(k.drpg) 
+            playDict[k.name].append(k.drebPer)
+            playDict[k.name].append(k.spg)  
+            playDict[k.name].append(k.bpg) 
+            playDict[k.name].append(k.oppPoT) 
+            playDict[k.name].append(k.oppPsec) 
+            playDict[k.name].append(k.oppPIP)
+            playDict[k.name].append(k.eightPer)
+            playDict[k.name].append(k.sixtTwentyPer)  
+            playDict[k.name].append(k.twenFourPer)  
+            playDict[k.name].append(k.gp) 
+            playDict[k.name].append(k.fgDiffPer) 
+        else:
+            playDict[k.name] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            playDict[k.name].append(k.drpg) 
+            playDict[k.name].append(k.drebPer)
+            playDict[k.name].append(k.spg)  
+            playDict[k.name].append(k.bpg) 
+            playDict[k.name].append(k.oppPoT) 
+            playDict[k.name].append(k.oppPsec) 
+            playDict[k.name].append(k.oppPIP)
+            playDict[k.name].append(k.eightPer)
+            playDict[k.name].append(k.sixtTwentyPer)  
+            playDict[k.name].append(k.twenFourPer)  
+            playDict[k.name].append(k.gp) 
+            playDict[k.name].append(k.fgDiffPer) 
+    
+
+
+
+    for y in minGP:
+        defGP.append(y.name)
+
+    offGP = PlayerOff.query.filter(PlayerOff.name.in_(defGP)).all()
+    off2GP = PlayerOff.query.filter(PlayerOff.name.in_(defGP)).all()
+    
+    
+    for x, v in playDict.items():
+        #to create a list of all ppgs
+        if x in defGP:
+            lst.append(v[statDex])
+
+    correct = playDict[playerName]
+
+
+    return round((stats.percentileofscore(lst, correct[statDex])), 2)
+
+def check(playerName):
+    ans = []
+    if percentile(playerName, 8) > 75.0:
+        return True
+
+
+
+
+       
+    
+
+
+
+
+
+
+        
