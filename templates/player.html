@@ -1,53 +1,160 @@
 <html>
 
-<header><title>{{player.name}}</title></header>
-<style> 
-        h1 { 
-            color:#799000; 
-            font-size:46px; 
-        } 
-        p { 
-            font-size:17px; 
-            margin-top:-25px; 
-            margin-left:15px; 
-        } 
+<header>
 
-        table, th, td { 
-            border: 1px solid black; 
-        } 
-        th, td { 
-            padding: 10px; 
-        } 
 
-        table { 
-            width: 100%; 
-            background-color: #00FFFF; 
-        } 
-        </style>
+	<title>{{player.name}}</title>
+
+</header>
+<style type="text/css">
+    html {
+      font-family: sans-serif;
+      line-height: 1.15;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+  
+    .player-table {
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top:10px;
+      font-size: 1.1em;
+      min-width: 500px;
+      border-radius: 5px 5px 0 0;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    }
+
+    .player-table thead tr {
+      background-color: darkorange;
+      color: black;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .player-table th,
+    .player-table td {
+      padding: 12px 15px;
+    }
+
+    .player-table tbody tr {
+      border-bottom: 1px solid lightgrey;
+    }
+
+    .player-table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+    }
+    .player-table tbody tr:last-of-type {
+      border-bottom: 2px solid darkorange;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      border-radius: 5px 5px 5px 5px;
+      /*height: 70px;*/
+    }
+    li {
+      float: left;
+      height: 70px;
+      border-color: black;
+      font-size: larger;
+    }
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 20px 16px;
+      text-decoration: none;
+      
+  
+    }
+    li a:hover {
+      background-color: #111;
+      color: white;
+
+    }
+    .master {
+      background-color: darkorange;
+      color: black;
+      font-weight: bolder;
+    }
+    .header {
+      text-align: center;
+      border-radius: 5px 5px 0 0;
+      text-shadow: 5px 5px 10px darkorange;
+      margin-bottom: 60px;
+      font-size: xx-large;
+    }
+    a {
+      height: 70px;
+    }
+    .header img { 
+ 	 width: 100px;
+ 	 height: 100px;
+ 	 background: white;
+ 	 float: left;
+	}	
+
+	.header h1 {
+  	position: relative;
+ 	top: 18px;
+  	left: 10px;
+	}
+
+
+
+</style>
 <body>
-	<h1 style="text-align:center;">{{player.name}}</h1>
-	<p> games playe: {{str}}
-	<p class = "text-capitalize"> {{str}} </p>
-	<img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Target_Flat_Icon.svg" alt="Three Point Shooter">
-	
-	<table style = "width:70%">
-		<tr> 
-			<th> Min </th>
-			<th> PPG </th>
-			<th> APG </th>
-			<th> FG% </th>
-			<th> 3FG% </th>
-			<th> Orpg </th>
-		</tr>
-		<tr>
-			<td> {{player.minutes}} </td>
-			<td> {{player.ppg}} which is {{last}} </td>
-			<td> {{player.apg}} </td>
-			<td> {{player.fgper}} </td>
-			<td> {{player.THptper}} </td>
-			<td> {{player.orpg}} </td>
-		</tr>
-	</table>
+	<ul class="navigation">
+    	<li><a class = "master" href= "{{url_for('all_players')}}">NBA Stats Home</a></li>
+    	<li><a href = "{{url_for('allteams_page')}}">Teams</a></li>
+    	<li><a href = "{{url_for('allplayer_page')}}">Players</a></li>
+    	<!-- <li><a href = "#page-top">Back To Top</a></li> -->
+    	<li><a href = "#defensive">Defensive</a></li>
+    	<li><a href = "#offensive">Offensive</a></li>
+  	</ul>
+
+  	<div class="header">
+  		<img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Target_Flat_Icon.svg" alt="Three Point Shooter">
+  		<h1>{{player.name}}</h1>
+	</div>
+
+	<!-- <h1 style="text-align:center;">{{player.name}}<img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Target_Flat_Icon.svg" alt="Three Point Shooter"></h1> -->
+	<!-- <p> games playe: {{str}}
+	<p class = "text-capitalize"> {{str}} </p> -->
+	<!-- <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Target_Flat_Icon.svg" alt="Three Point Shooter"> -->
+	<div class = "offensive">
+		<table class = "player-table" style = "width:70%">
+			<thead>
+				<tr> 
+					<th> Min </th>
+					<th> PPG </th>
+					<th> APG </th>
+					<th> FG% </th>
+					<th> 3FG% </th>
+					<th> Orpg </th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td> {{player.minutes}} </td>
+					<td> {{player.ppg}} which is {{last}} </td>
+					<td> {{player.apg}} </td>
+					<td> {{player.fgper}} </td>
+					<td> {{player.THptper}} </td>
+					<td> {{player.orpg}} </td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
 		<!-- ppg: {{player.ppg}}<br> -->
 
@@ -76,9 +183,9 @@
 	<hr>
 	</p> -->
 <!-- 	<br> -->
-	<br>
+	<!-- <br>
 	<a href="http://127.0.0.1:5000/"> 
         Home Page 
-    </a><br> 
+    </a><br>  -->
 </body>
 </html>
