@@ -10,6 +10,22 @@ class Player(db.Model):
     __tablename__ = 'players'
     __table_args__ = {'extend_existing': True}
     name = db.Column('name', db.String(20), primary_key=True)
+    age = db.Column('age', db.Integer)
+
+class IsOn(db.Model):
+	__tablename__ = 'ison'
+	player = db.Column('player', db.String(20), primary_key=True)
+	team = db.Column('team', db.String(20),primary_key=True)
+
+class Teams(db.Model):
+	__tablename__ = 'teams'
+	teamname = db.Column('teamname', db.String(50), primary_key=True) 
+	teamabv = db.Column('teamabv', db.String(50))
+
+class CoachedBy(db.Model):
+	__tablename__ = "coachedby"
+	coach = db.Column('coach', db.String(40), primary_key=True)
+	team = db.Column('team', db.String(20), primary_key=True)
 
 
 

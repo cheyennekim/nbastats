@@ -16,6 +16,17 @@ def all_players():
      return render_template('first.html', players=players)
 
 
+@app.route('/allplayers')
+def allplayer_page():
+    players = models.IsOn.query.join(models.Player, models.IsOn.player == models.Player.name)\
+    	.add_columns(models.IsOn.player, models.IsOn.team, models.Player.age)
+    return render_template('allplayers.html', players=players)
+
+@app.route('/allteams')
+def allteams_page():
+	teams = models.Teams.query.join(models.CoachedBy, models.Teams.teamabv == models.CoachedBy.team)\
+		.add_columns(models.Teams.teamname, models.Teams.teamabv, models.CoachedBy.coach)
+	return render_template('allteams.html', teams=teams)
 
 @app.route('/<some_player>')
 def some_player_page(some_player):
