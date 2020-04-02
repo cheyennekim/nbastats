@@ -23,11 +23,16 @@ def some_player_page(some_player):
 	Player = models.PlayerOff.query.filter_by(name=some_player).first()
 	pD = models.PlayerDef.query.filter_by(name=some_player).first()
 
+	percentFG = models.percentile(some_player, 3)
+	tot = "str"
+	type1 = "type"
 
-	tot = models.ply()
-	type1 = "sfds"
+	boo = models.check(some_player)
 
 
 
-	return render_template('player.html', player = Player, player1 = PlayerAdv, pDef = pD, str = tot, type = type1)
+
+
+
+	return render_template('player.html', player = Player, player1 = PlayerAdv, pDef = pD, str = tot, type = type1, last = percentFG, verdict = boo)
 	# return render_template('player.html')

@@ -1,8 +1,9 @@
 from sqlalchemy import sql, orm
 from app import db
 import numpy as np
-from statistics import mean 
+from statistics import mean, median
 from scipy import stats
+import difflib
 
 
 class Player(db.Model):
@@ -134,35 +135,119 @@ def avg(att):
     #     denom+=1
     return mean(lstAtt)
 
-def ppgPer(pt):
-    lst = []
+def percentile(playerName, statDex):
+    defGP = []
+    #list of players in defStat with minimum games played: 5
+    playDict = {}
+    defDict = {}
+    off2Dict = {}
     lstPts = []
-    lstNms = []
-    dict2 = {}
+    lstApg = []
+    lstTov = []
+    lstOrpg = []
+    lstfgper = []
+    lstMinutes = []
+    lstTHptAr = []
+    lstTWptmr = []
+    lstTHptr = []
+    lstFbpsr = []
+    lst = []
 
     Ans = []
 
-    off1 = PlayerOff.query.all()
+    off = PlayerOff.query.all()
+    #all playerOff instances in offStat table
     def1 = PlayerDef.query.all()
-    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
+    #all playerDef instances in defStat table
+    minGP = PlayerDef.query.filter(PlayerDef.gp>8).all()
+    #all playerDef instances in defStat table and > 4 gp
+    off2 = PlayerAdvOff.query.all()
+    #all playerAdvOff instances in advOff table
+
+    for r in off:
+        playDict[r.name] = [r.ppg, r.apg, r.tov, r.orpg, r.fgper, r.minutes, r.THptAr, r.TWptmr, r.THptr, r.fbpsr, r.ftr, r.pipr, r.fgmUass, r.THptAtt, r.THptper, r.ftAtt, r.ftper, r.THptperD]
+    
+   
+    for p in off2:
+        if p.name in playDict:
+            playDict[p.name].append(p.drPts) 
+            playDict[p.name].append(p.drPer)
+            playDict[p.name].append(p.casPts)  
+            playDict[p.name].append(p.casPer) 
+            playDict[p.name].append(p.pullPts) 
+            playDict[p.name].append(p.pullPer) 
+            playDict[p.name].append(p.postPts)
+            playDict[p.name].append(p.postPer)
+            playDict[p.name].append(p.elbPts)  
+            playDict[p.name].append(p.elbPer)  
+        else:
+            playDict[p.name] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            playDict[p.name].append(p.drPts) 
+            playDict[p.name].append(p.drPer)
+            playDict[p.name].append(p.casPts)  
+            playDict[p.name].append(p.casPer) 
+            playDict[p.name].append(p.pullPts) 
+            playDict[p.name].append(p.pullPer) 
+            playDict[p.name].append(p.postPts)
+            playDict[p.name].append(p.postPer)
+            playDict[p.name].append(p.elbPts)  
+            playDict[p.name].append(p.elbPer)  
+
+    for k in def1:
+        if k.name in playDict:
+            playDict[k.name].append(k.drpg) 
+            playDict[k.name].append(k.drebPer)
+            playDict[k.name].append(k.spg)  
+            playDict[k.name].append(k.bpg) 
+            playDict[k.name].append(k.oppPoT) 
+            playDict[k.name].append(k.oppPsec) 
+            playDict[k.name].append(k.oppPIP)
+            playDict[k.name].append(k.eightPer)
+            playDict[k.name].append(k.sixtTwentyPer)  
+            playDict[k.name].append(k.twenFourPer)  
+            playDict[k.name].append(k.gp) 
+            playDict[k.name].append(k.fgDiffPer) 
+        else:
+            playDict[k.name] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            playDict[k.name].append(k.drpg) 
+            playDict[k.name].append(k.drebPer)
+            playDict[k.name].append(k.spg)  
+            playDict[k.name].append(k.bpg) 
+            playDict[k.name].append(k.oppPoT) 
+            playDict[k.name].append(k.oppPsec) 
+            playDict[k.name].append(k.oppPIP)
+            playDict[k.name].append(k.eightPer)
+            playDict[k.name].append(k.sixtTwentyPer)  
+            playDict[k.name].append(k.twenFourPer)  
+            playDict[k.name].append(k.gp) 
+            playDict[k.name].append(k.fgDiffPer) 
+    
+
+
+
+    for y in minGP:
+        defGP.append(y.name)
+
+    offGP = PlayerOff.query.filter(PlayerOff.name.in_(defGP)).all()
+    off2GP = PlayerOff.query.filter(PlayerOff.name.in_(defGP)).all()
     
     
-    result = [r.drPts for r in PlayerAdvOff.query]
-    for x in result:
-        print(x)
+    for x, v in playDict.items():
+        #to create a list of all ppgs
+        if x in defGP:
+            lst.append(v[statDex])
 
-    for y in def2:
-        lst.append(y.name)
-
-    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
-    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
-    for x in q1:
-        lstPts.append(x.ppg)
-
-    Ans.append(stats.percentileofscore(lstPts, pt))
+    correct = playDict[playerName]
 
 
-print(ppgPer(28))
+    return round((stats.percentileofscore(lst, correct[statDex])), 2)
+
+def check(playerName):
+    ans = []
+    if percentile(playerName, 8) > 75.0:
+        return True
+
+
 
 
        
