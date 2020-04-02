@@ -47,3 +47,8 @@ def some_player_page(some_player):
 
 	return render_template('player.html', player = Player, player1 = PlayerAdv, pDef = pD, str = tot, type = type1, last = percentFG, verdict = boo)
 	# return render_template('player.html')
+
+@app.route('/search/<search>')
+def search_page(searched_player):
+    aplayer = models.PlayerOff.query.filter_by(name=searched_player).first()
+    return render_template('search.html', player = aplayer)
