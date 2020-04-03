@@ -50,6 +50,11 @@ def some_player_page(some_player):
 
 @app.route('/allteams/<some_team>')
 def teams_page(some_team):
-	team = models.Teams.query.join(models.CoachedBy, models.Teams.teamabv == models.CoachedBy.team)\
-		.add_columns(models.Teams.teamname, models.Teams.teamabv, models.CoachedBy.coach)
-	return render_template('team.html', team=team)
+	Teams= db.session.execute('WITH temp1 as (select * from Teams, CoachedBy where Teams.teamabv = :val and Teams.teamabv = CoachedBy.team), temp2 as (select * from coaches) select * from temp1, temp2 where temp2.name = temp1.coach', {'val': some_team}).first()
+	players = db.session.execute('select * from isOn where team= :val', {'val': some_team})
+	return render_template('team.html', team=Teams, players=players)
+
+@app.route('/search/<search>')
+def search_page(searched_player):
+    aplayer = models.PlayerOff.query.filter_by(name=searched_player).first()
+    return render_template('search.html', player = aplayer)
