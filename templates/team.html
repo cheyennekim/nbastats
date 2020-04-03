@@ -1,0 +1,27 @@
+
+    <link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <nav class="navbar shadow-sm navbar-transparent navbar-expand-lg navbar-relative" style="border-bottom: 0.5px  margin-top: -7px; z-index: 1;">
+      <a class="navbar-brand" href="#">NBA Stats</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link" href="{{url_for('allteams_page')}}">Teams</a>
+          <a class="nav-item nav-link" href="{{url_for('allplayer_page')}}">Players</a>
+        </div>
+      </div>
+    </nav>
+
+    <body>
+        <h1 style="text-align:center;">{{team.teamname}}</h1>
+        {% for team in teams %}
+        <tr>
+          <td>{{team.teamname}}</td>
+          <td>{{team.teamabv}}</td>
+          <td>{{team.coach}}</td>
+        </tr>
+    </body>
+

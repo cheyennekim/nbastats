@@ -47,3 +47,9 @@ def some_player_page(some_player):
 
 	return render_template('player.html', player = Player, player1 = PlayerAdv, pDef = pD, str = tot, type = type1, last = percentFG, verdict = boo)
 	# return render_template('player.html')
+
+@app.route('/allteams/<some_team>')
+def teams_page(some_team):
+	team = models.Teams.query.join(models.CoachedBy, models.Teams.teamabv == models.CoachedBy.team)\
+		.add_columns(models.Teams.teamname, models.Teams.teamabv, models.CoachedBy.coach)
+	return render_template('team.html', team=team)
