@@ -66,6 +66,32 @@ class PlayerOff(db.Model):
     		print("less")
     		return "less"
 
+class touchDrives(db.Model):
+    __tablename__ = 'touchDrives'
+    __table_args__ = {'extend_existing': True}
+    name = db.Column('name', db.String(20), db.ForeignKey('player'), primary_key=True)
+    touches = db.Column('touches', db.Float)
+    fcTouch = db.Column('fcTouch', db.Float)
+    timeOfpos = db.Column('timeOfpos', db.Float)
+    avgSecTouch = db.Column('avgSecTouch', db.Float)
+    ppTouch = db.Column('ppTouch', db.Float)
+
+    elbowTouch = db.Column('elbowTouch', db.Float)
+    postUps = db.Column('postUps', db.Float)
+    paintTouch = db.Column('paintTouch', db.Float)
+    ppElb = db.Column('ppElb', db.Float)
+    ppPost = db.Column('ppPost', db.Float)
+
+    ppPaint = db.Column('ppPaint', db.Float)
+    drives = db.Column('drives', db.Float)
+    dFGA = db.Column('dFGA', db.Float)
+    dFGper = db.Column('dFGper', db.Float)
+    dpts = db.Column('dpts', db.Float)
+
+    dPassPer = db.Column('dPassPer', db.Float)
+    dAstPer = db.Column('dAstPer', db.Float)
+    dTovPer = db.Column('dTovPer', db.Float)
+    dFoulPer = db.Column('dFoulPer', db.Float)
 
 class PlayerAdvOff(db.Model):
     __tablename__ = 'advOff'
@@ -183,6 +209,7 @@ def setDic():
     #all playerDef instances in defStat table and > 4 gp
     off2 = PlayerAdvOff.query.all()
     #all playerAdvOff instances in advOff table
+    off3 = touchDrives.query.all()
 
     for r in off:
         playDict[r.name] = [r.ppg, r.apg, r.tov, r.orpg, r.fgper, r.minutes, r.THptAr, r.TWptmr, r.THptr, r.fbpsr, r.ftr, r.pipr, r.fgmUass, r.THptAtt, r.THptper, r.ftAtt, r.ftper, r.THptperD]
@@ -241,7 +268,30 @@ def setDic():
             playDict[k.name].append(k.twenFourPer)  
             playDict[k.name].append(k.gp) 
             playDict[k.name].append(k.fgDiffPer) 
-    
+
+    for k in off3:
+        if k.name in playDict:
+            playDict[k.name].append(k.touches) 
+            playDict[k.name].append(k.fcTouch)
+            playDict[k.name].append(k.timeOfpos)  
+            playDict[k.name].append(k.avgSecTouch) 
+            playDict[k.name].append(k.ppTouch) 
+            playDict[k.name].append(k.elbowTouch) 
+            playDict[k.name].append(k.postUps)
+            playDict[k.name].append(k.paintTouch)
+            playDict[k.name].append(k.ppElb)  
+            playDict[k.name].append(k.ppPost)  
+            playDict[k.name].append(k.ppPaint) 
+            playDict[k.name].append(k.drives) 
+
+            playDict[k.name].append(k.dFGA) 
+            playDict[k.name].append(k.dFGper)
+            playDict[k.name].append(k.dpts)
+            playDict[k.name].append(k.dPassPer)  
+            playDict[k.name].append(k.dAstPer)  
+            playDict[k.name].append(k.dTovPer) 
+            playDict[k.name].append(k.dFoulPer) 
+
     return playDict
 dic = setDic()
 
@@ -289,7 +339,7 @@ def percentile(playerName, statDex):
 
 def check(playerName):
     ans = []
-    for x in range(40):
+    for x in range(59):
         print(x)
         ans.append(percentile(playerName, x))
     return ans
@@ -305,7 +355,7 @@ def printer(playerName):
 
 
 
-print(check("Patrick Beverley"))
+print(check("JJ Redick"))
 
 
        
