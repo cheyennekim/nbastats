@@ -6,6 +6,8 @@ from scipy import stats
 import difflib
 
 
+
+
 class Player(db.Model):
     __tablename__ = 'players'
     __table_args__ = {'extend_existing': True}
@@ -13,19 +15,22 @@ class Player(db.Model):
     age = db.Column('age', db.Integer)
 
 class IsOn(db.Model):
-	__tablename__ = 'ison'
-	player = db.Column('player', db.String(20), primary_key=True)
-	team = db.Column('team', db.String(20),primary_key=True)
+    __tablename__ = 'ison'
+    __table_args__ = {'extend_existing': True}
+    player = db.Column('player', db.String(20), primary_key=True)
+    team = db.Column('team', db.String(20),primary_key=True)
 
 class Teams(db.Model):
-	__tablename__ = 'teams'
-	teamname = db.Column('teamname', db.String(50), primary_key=True) 
-	teamabv = db.Column('teamabv', db.String(50))
+    __tablename__ = 'teams'
+    __table_args__ = {'extend_existing': True}
+    teamname = db.Column('teamname', db.String(50), primary_key=True) 
+    teamabv = db.Column('teamabv', db.String(50))
 
 class CoachedBy(db.Model):
-	__tablename__ = "coachedby"
-	coach = db.Column('coach', db.String(40), primary_key=True)
-	team = db.Column('team', db.String(20), primary_key=True)
+    __tablename__ = "coachedby"
+    __table_args__ = {'extend_existing': True}
+    coach = db.Column('coach', db.String(40), primary_key=True)
+    team = db.Column('team', db.String(20), primary_key=True)
 
 
 
@@ -62,6 +67,32 @@ class PlayerOff(db.Model):
     	else:
     		print("less")
     		return "less"
+class DriveTouch(db.Model):
+    __tablename__ = 'touchDrives'
+    __table_args__ = {'extend_existing': True}
+    name = db.Column('name', db.String(20), db.ForeignKey('player'), primary_key=True)
+    touches = db.Column('touches', db.Float)
+    fcTouch = db.Column('fcTouch', db.Float)
+    timeOfpos = db.Column('timeOfpos', db.Float)
+    avgSecTouch = db.Column('avgSecTouch', db.Float)
+    ppTouch = db.Column('ppTouch', db.Float)
+
+    elbowTouch = db.Column('elbowTouch', db.Float)
+    postUps = db.Column('postUps', db.Float)
+    paintTouch = db.Column('paintTouch', db.Float)
+    ppElb = db.Column('ppElb', db.Float)
+    ppPost = db.Column('ppPost', db.Float)
+
+    ppPaint = db.Column('ppPaint', db.Float)
+    drives = db.Column('drives', db.Float)
+    dFGA = db.Column('dFGA', db.Float)
+    dFGper = db.Column('dFGper', db.Float)
+    dpts = db.Column('dpts', db.Float)
+
+    dPassPer = db.Column('dPassPer', db.Float)
+    dAstPer = db.Column('dAstPer', db.Float)
+    dTovPer = db.Column('dTovPer', db.Float)
+    dFoulPer = db.Column('dFoulPer', db.Float)
 
 
 class PlayerAdvOff(db.Model):
@@ -98,60 +129,7 @@ class PlayerDef(db.Model):
     def __repr__(self):
         return self.name
 
-
-def games(playername):
-    defPlayer = PlayerDef.query.filter_by(name=playername).first()
-    return defPlayer.gp
-
-def ppg(percentile):
-    lst = []
-    lstPts = []
-    lstNms = []
-    dict2 = {}
-    pts=0
-    denom=0
-    off1 = PlayerOff.query.all()
-    def1 = PlayerDef.query.all()
-    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
-    off2 = PlayerAdvOff.query
-    for y in def2:
-        lst.append(y.name)
-
-    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
-    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
-    for x in q1:
-        lstPts.append(x.ppg)
-        lstNms.append(x.name)
-    # for player in q1: 
-    #     pts+=player.ppg
-    #     denom+=1
-    return np.percentile(lstPts, percentile)
-
-def avg(att):
-    lst = []
-    lstAtt = []
-    lstNms = []
-    dict2 = {}
-    pts=0
-    denom=0
-    off1 = PlayerOff.query.all()
-    def1 = PlayerDef.query.all()
-    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
-    off2 = PlayerAdvOff.query
-    for y in def2:
-        lst.append(y.name)
-
-    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
-    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
-    for x in q1:
-        lstAtt.append(x.att)
-        lstNms.append(x.name)
-    # for player in q1: 
-    #     pts+=player.ppg
-    #     denom+=1
-    return mean(lstAtt)
-
-def percentile(playerName, statDex):
+def setDict():
     defGP = []
     #list of players in defStat with minimum games played: 5
     playDict = {}
@@ -179,6 +157,8 @@ def percentile(playerName, statDex):
     #all playerDef instances in defStat table and > 4 gp
     off2 = PlayerAdvOff.query.all()
     #all playerAdvOff instances in advOff table
+    off3 = DriveTouch.query.all()
+
 
     for r in off:
         playDict[r.name] = [r.ppg, r.apg, r.tov, r.orpg, r.fgper, r.minutes, r.THptAr, r.TWptmr, r.THptr, r.fbpsr, r.ftr, r.pipr, r.fgmUass, r.THptAtt, r.THptper, r.ftAtt, r.ftper, r.THptperD]
@@ -237,31 +217,149 @@ def percentile(playerName, statDex):
             playDict[k.name].append(k.twenFourPer)  
             playDict[k.name].append(k.gp) 
             playDict[k.name].append(k.fgDiffPer) 
+    for p in off3:
+        if p.name in playDict:
+            playDict[p.name].append(p.touches) 
+            playDict[p.name].append(p.fcTouch) 
+            playDict[p.name].append(p.timeOfpos)
+            playDict[p.name].append(p.avgSecTouch)  
+            playDict[p.name].append(p.ppTouch) 
+            playDict[p.name].append(p.elbowTouch) 
+            playDict[p.name].append(p.postUps) 
+            playDict[p.name].append(p.paintTouch)
+            playDict[p.name].append(p.ppElb)
+            playDict[p.name].append(p.ppPost)  
+            playDict[p.name].append(p.ppPaint)
+            playDict[p.name].append(p.drives) 
+            playDict[p.name].append(p.dFGA) 
+            playDict[p.name].append(p.dFGper)
+            playDict[p.name].append(p.dpts)
+            playDict[p.name].append(p.dPassPer)  
+            playDict[p.name].append(p.dAstPer)
+            playDict[p.name].append(p.dTovPer)  
+            playDict[p.name].append(p.dFoulPer)
+
+    return playDict
+dic = setDict()
+
+def games(playername):
+    defPlayer = PlayerDef.query.filter_by(name=playername).first()
+    return defPlayer.gp
+
+def ppg(percentile):
+    lst = []
+    lstPts = []
+    lstNms = []
+    dict2 = {}
+    pts=0
+    denom=0
+    off1 = PlayerOff.query.all()
+    def1 = PlayerDef.query.all()
+    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
+    off2 = PlayerAdvOff.query
+    for y in def2:
+        lst.append(y.name)
+
+    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
+    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
+    for x in q1:
+        lstPts.append(x.ppg)
+        lstNms.append(x.name)
+    # for player in q1: 
+    #     pts+=player.ppg
+    #     denom+=1
+    return np.percentile(lstPts, percentile)
+
+def avg(att):
+    lst = []
+    lstAtt = []
+    lstNms = []
+    dict2 = {}
+    pts=0
+    denom=0
+    off1 = PlayerOff.query.all()
+    def1 = PlayerDef.query.all()
+    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
+    off2 = PlayerAdvOff.query
+    for y in def2:
+        lst.append(y.name)
+
+    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
+    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
+    for x in q1:
+        lstAtt.append(x.att)
+        lstNms.append(x.name)
+    # for player in q1: 
+    #     pts+=player.ppg
+    #     denom+=1
+    return mean(lstAtt)
+
+
     
 
+def percentile(playerName, statDex):
+    defGP = []
+    #list of players in defStat with minimum games played: 5
+    defDict = {}
+    off2Dict = {}
+    lstPts = []
+    lstApg = []
+    lstTov = []
+    lstOrpg = []
+    lstfgper = []
+    lstMinutes = []
+    lstTHptAr = []
+    lstTWptmr = []
+    lstTHptr = []
+    lstFbpsr = []
+    lst = []
 
+    Ans = []
+
+
+    minGP = PlayerDef.query.filter(PlayerDef.gp>8).all()
+    #all playerDef instances in defStat table and > 4 gp
+
+
+    
 
     for y in minGP:
         defGP.append(y.name)
-
-    offGP = PlayerOff.query.filter(PlayerOff.name.in_(defGP)).all()
-    off2GP = PlayerOff.query.filter(PlayerOff.name.in_(defGP)).all()
     
     
-    for x, v in playDict.items():
+    for x, v in dic.items():
         #to create a list of all ppgs
         if x in defGP:
             lst.append(v[statDex])
 
-    correct = playDict[playerName]
+    correct = dic[playerName]
 
 
     return round((stats.percentileofscore(lst, correct[statDex])), 2)
 
 def check(playerName):
     ans = []
-    if percentile(playerName, 8) > 75.0:
-        return True
+    for x in range(59):
+        ans.append(percentile(playerName, x))
+        # if percentile(playerName, x) > perGood:
+        #     ans.append(1)
+        # elif percentile(playerName, x) < perBad:
+        #     ans.append(-1)
+        # else:
+        #     ans.append(0)
+    return ans
+
+def printer(playerName):
+    index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
+    check1 = check(playerName)
+    for x in range(len(check1)):
+        if check1[x] > 90.0:
+            print(index[x], check1[x])
+        if check1[x] < 20.0:
+            print(index[x], check1[x])
+    
+print(printer("Patrick Beverley"))
+
 
 
 
