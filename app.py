@@ -48,6 +48,12 @@ def some_player_page(some_player):
 	return render_template('player.html', player = Player, player1 = PlayerAdv, pDef = pD, str = tot, type = type1, last = percentFG, verdict = boo)
 	# return render_template('player.html')
 
+@app.route('/allteams/<some_team>')
+def teams_page(some_team):
+	Teams= db.session.execute('WITH temp1 as (select * from Teams, CoachedBy where Teams.teamabv = :val and Teams.teamabv = CoachedBy.team), temp2 as (select * from coaches) select * from temp1, temp2 where temp2.name = temp1.coach', {'val': some_team}).first()
+	players = db.session.execute('select * from isOn where team= :val', {'val': some_team})
+	return render_template('team.html', team=Teams, players=players)
+
 @app.route('/search/<search>')
 def search_page(searched_player):
     aplayer = models.PlayerOff.query.filter_by(name=searched_player).first()
