@@ -13,19 +13,22 @@ class Player(db.Model):
     age = db.Column('age', db.Integer)
 
 class IsOn(db.Model):
-	__tablename__ = 'ison'
-	player = db.Column('player', db.String(20), primary_key=True)
-	team = db.Column('team', db.String(20),primary_key=True)
+    __tablename__ = 'ison'
+    __table_args__ = {'extend_existing': True}
+    player = db.Column('player', db.String(20), primary_key=True)
+    team = db.Column('team', db.String(20),primary_key=True)
 
 class Teams(db.Model):
-	__tablename__ = 'teams'
-	teamname = db.Column('teamname', db.String(50), primary_key=True) 
-	teamabv = db.Column('teamabv', db.String(50))
+    __tablename__ = 'teams'
+    __table_args__ = {'extend_existing': True}
+    teamname = db.Column('teamname', db.String(50), primary_key=True) 
+    teamabv = db.Column('teamabv', db.String(50))
 
 class CoachedBy(db.Model):
-	__tablename__ = "coachedby"
-	coach = db.Column('coach', db.String(40), primary_key=True)
-	team = db.Column('team', db.String(20), primary_key=True)
+    __tablename__ = "coachedby"
+    __table_args__ = {'extend_existing': True}
+    coach = db.Column('coach', db.String(40), primary_key=True)
+    team = db.Column('team', db.String(20), primary_key=True)
 
 
 
@@ -100,6 +103,7 @@ class PlayerDef(db.Model):
 
 
 def games(playername):
+    __table_args__ = {'extend_existing': True}
     defPlayer = PlayerDef.query.filter_by(name=playername).first()
     return defPlayer.gp
 
@@ -151,7 +155,7 @@ def avg(att):
     #     denom+=1
     return mean(lstAtt)
 
-def percentile(playerName, statDex):
+def setDic():
     defGP = []
     #list of players in defStat with minimum games played: 5
     playDict = {}
@@ -238,32 +242,70 @@ def percentile(playerName, statDex):
             playDict[k.name].append(k.gp) 
             playDict[k.name].append(k.fgDiffPer) 
     
+    return playDict
+dic = setDic()
+
+def percentile(playerName, statDex):
+    defGP = []
+    #list of players in defStat with minimum games played: 5
+    defDict = {}
+    off2Dict = {}
+    lstPts = []
+    lstApg = []
+    lstTov = []
+    lstOrpg = []
+    lstfgper = []
+    lstMinutes = []
+    lstTHptAr = []
+    lstTWptmr = []
+    lstTHptr = []
+    lstFbpsr = []
+    lst = []
+
+    Ans = []
 
 
+    minGP = PlayerDef.query.filter(PlayerDef.gp>8).all()
+    #all playerDef instances in defStat table and > 4 gp
+
+
+    
 
     for y in minGP:
         defGP.append(y.name)
-
-    offGP = PlayerOff.query.filter(PlayerOff.name.in_(defGP)).all()
-    off2GP = PlayerOff.query.filter(PlayerOff.name.in_(defGP)).all()
     
     
-    for x, v in playDict.items():
+    for x, v in dic.items():
         #to create a list of all ppgs
         if x in defGP:
             lst.append(v[statDex])
 
-    correct = playDict[playerName]
+    correct = dic[playerName]
 
 
     return round((stats.percentileofscore(lst, correct[statDex])), 2)
 
+
+
 def check(playerName):
     ans = []
-    if percentile(playerName, 8) > 75.0:
-        return True
+    for x in range(40):
+        print(x)
+        ans.append(percentile(playerName, x))
+    return ans
+
+def printer(playerName):
+    index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
+    check1 = check(playerName)
+    for x in range(len(check1)):
+        if check1[x] > 90.0:
+            print(index[x], check1[x])
+        if check1[x] < 20.0:
+            print(index[x], check1[x])
 
 
+
+print(check("Patrick Beverley"))
 
 
        
