@@ -77,5 +77,5 @@ def teams_page(some_team):
 
 @app.route('/search/<searched_player>')
 def search_page(searched_player):
-    player = models.PlayerOff.query.filter_by(name=searched_player).first()
-    return render_template('search.html', player = player)
+    aplayer = models.PlayerOff.query.filter_by(name = searched_player).first()
+    return render_template('search.html', player = aplayer)
