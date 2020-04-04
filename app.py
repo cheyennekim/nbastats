@@ -75,7 +75,7 @@ def teams_page(some_team):
 	players = db.session.execute('select * from isOn where team= :val', {'val': some_team})
 	return render_template('team.html', team=Teams, players=players)
 
-@app.route('/search/<search>')
+@app.route('/search/<searched_player>')
 def search_page(searched_player):
-    aplayer = models.PlayerOff.query.filter_by(name=searched_player).first()
+    aplayer = models.PlayerOff.query.filter_by(name = searched_player).first()
     return render_template('search.html', player = aplayer)
