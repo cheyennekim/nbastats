@@ -13,6 +13,24 @@
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
+
+    #key-stats {
+      height:300px;
+      width:200px;
+      overflow:auto;
+      overflow-x:hidden;
+    }
+
+    #key-table {
+      height:300px;
+      width:200px;
+    }
+    #key-table thead tr {
+      background-color: darkorange;
+      color: black;
+      text-align: left;
+      font-weight: bold;
+    }
   
     .player-table {
       border-collapse: collapse;
@@ -114,6 +132,9 @@
       background-color: white;
 
     }
+  body {
+    display: flex<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>;
+  }
 
 </style>
 <body>
@@ -129,37 +150,58 @@
 
   	<div class="header">
   		<img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Target_Flat_Icon.svg" alt="Three Point Shooter">
-  		<h1>{{player.name}}</h1>
+  		<h1>test</h1>
 	</div>
 
 	<!-- <h1 style="text-align:center;">{{player.name}}<img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Target_Flat_Icon.svg" alt="Three Point Shooter"></h1> -->
 	<!-- <p> games playe: {{str}}
 	<p class = "text-capitalize"> {{str}} </p> -->
 	<!-- <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Target_Flat_Icon.svg" alt="Three Point Shooter"> -->
-	<div class = "offensive">
-		<table class = "player-table" style = "width:70%">
-			<thead>
-				<tr> 
-					<th> Min </th>
-					<th> PPG </th>
-					<th> APG </th>
-					<th> FG% </th>
-					<th> 3FG% </th>
-					<th> Orpg </th>
-				</tr>
-			</thead>
+	<div id = "key-stats">
+		<table id = "key-table" style = "">
+      <thead>
+        <tr>
+          <th> Stat </th>
+          <th> NBA Percentile </th>
+        </tr>
+      </thead>
 			<tbody>
-				<tr>
-					<td> {{player.minutes}} </td>
-					<td> {{player.ppg}} </td>
-					<td> {{player.apg}} </td>
-					<td> {{player.fgper}} </td>
-					<td> {{player.THptper}} </td>
-					<td> {{player.orpg}} </td>
+				<tr> 
+          {% for x in lstG %}
+          <tr>
+					<th> {{x[1]}} </th>
+          <td> {{x[0]}} </td>
+          {% endfor %}
 				</tr>
 			</tbody>
+
 		</table>
 	</div>
+
+  <div id = "summary">
+    <table class = "player-table" style = "width:70%">
+      <thead>
+        <tr> 
+          <th> Min </th>
+          <th> PPG </th>
+          <th> APG </th>
+          <th> FG% </th>
+          <th> 3FG% </th>
+          <th> Orpg </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> {{player.minutes}} </td>
+          <td> {{player.ppg}} </td>
+          <td> {{player.apg}} </td>
+          <td> {{player.fgper}} </td>
+          <td> {{player.THptper}} </td>
+          <td> {{player.orpg}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
 		<!-- ppg: {{player.ppg}}<br> -->
 

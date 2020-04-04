@@ -1,0 +1,278 @@
+<html>
+
+<header>
+
+
+	<title>{{player.name}}</title>
+
+</header>
+<style type="text/css">
+  html {
+    font-family: sans-serif;
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  
+
+  .container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 10px;
+    padding: 10px;
+  }
+
+  .key-stats {
+    height:300px;
+    width:auto;
+    overflow:auto;
+    overflow-x:hidden;
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+
+  .summary {
+    height:auto;
+    width:auto;
+    overflow:auto;
+    overflow-x:hidden;
+    grid-column-start: 2;
+    grid-column-end: 5;
+  }
+
+  .key-table {
+    grid-column-start: 2
+    grid-column-end: 4;
+    height:300px;
+    width:200px;
+  }
+
+  .key-table thead tr {
+    background-color: darkorange;
+    color: black;
+    text-align: left;
+    font-weight: bold;
+  }
+
+
+
+  .player-table {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:10px;
+    font-size: 1.1em;
+    min-width: 500px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  }
+
+  .player-table thead tr {
+    background-color: darkorange;
+    color: black;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .player-table th,
+  .player-table td {
+    padding: 12px 15px;
+  }
+
+  .player-table, .t tbody tr {
+    border-bottom: 1px solid lightgrey;
+  }
+
+  .player-table, .key-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+  }
+  .player-table tbody tr:last-of-type {
+    border-bottom: 2px solid darkorange;
+  }
+  
+  .navigation {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  }
+
+  .offdef-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    padding: 10px;
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-bottom: 40px;
+  }
+
+  li {
+    float: left;
+    height: 70px;
+    border-color: black;
+    font-size: larger;
+  }
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 20px 16px;
+    text-decoration: none;
+
+
+  }
+  li a:hover {
+    background-color: #111;
+    color: white;
+
+  }
+  .master {
+    background-color: darkorange;
+    color: black;
+    font-weight: bolder;
+  }
+  .header {
+    text-align: center;
+    border-radius: 5px 5px 0 0;
+    text-shadow: 5px 5px 10px darkorange;
+    margin-bottom: 60px;
+    font-size: xx-large;
+  }
+
+  .offdef-nav ul {
+    list-style: none;
+    background-color: #444;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  .offdef-nav li {
+    display: inline-block;
+    margin-right: -4px;
+  }
+
+  a {
+    height: 70px;
+  }
+
+  .header img { 
+    width: 100px;
+    height: 100px;
+    background: white;
+    float: left;
+  } 
+
+  .header h1 {
+    position: relative;
+    top: 18px;
+    left: 10px;
+  }
+
+  .navbar-brand {
+    background-color: white;
+
+  }
+  body {
+    display: flex<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>;
+  }
+
+
+</style>
+
+
+
+<body>
+	<ul class="navigation">
+		<li><a class="navbar-brand" href="/"><img src="https://i.imgur.com/FiAyjEj.png" width="100" height="40" class="d-inline-block align-top" alt=""></a></li>
+   <li><a class = "master" href= "{{url_for('all_players')}}">NBA Stats Home</a></li>
+   <li><a href = "{{url_for('allteams_page')}}">Teams</a></li>
+   <li><a href = "{{url_for('allplayer_page')}}">Players</a></li>
+   <!-- <li><a href = "#page-top">Back To Top</a></li> -->
+ </ul>
+ <div class="header">
+  <h1>{{player.name}}</h1>
+</div>
+
+<div class="sec1">
+  <ul class="offdef-nav">
+    <li><a href = "#defensive">Defensive</a></li>
+    <li><a href = "#offensive">Offensive</a></li>
+    <li><a href = "#scoutingreport">Scouting Report</a></li>
+  </ul>
+</div>
+
+
+<div class = "container">
+  <div class = "key-stats">
+    <h1> Key Numbers </h1>
+    <table class = "key-table" style = "width:70%">
+      <thead>
+        <tr>
+          <th> Stat </th>
+          <th> NBA Percentile </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          {% for x in lstG %}
+          <tr>
+           <th> {{x[1]}} </th>
+           <td> {{x[0]}} </td>
+           {% endfor %}
+         </tr>
+       </tbody>
+
+     </table>
+   </div>
+
+   <div class = "summary">
+    <h1 style = "text-align: center"> Summary </h1>
+    <table class = "player-table" style = "width:70%">
+      <thead>
+        <tr> 
+          <th> Min </th>
+          <th> PPG </th>
+          <th> APG </th>
+          <th> FG% </th>
+          <th> 3FG% </th>
+          <th> Orpg </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> {{player.minutes}} </td>
+          <td> {{player.ppg}} </td>
+          <td> {{player.apg}} </td>
+          <td> {{player.fgper}} </td>
+          <td> {{player.THptper}} </td>
+          <td> {{player.orpg}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+</body>
+
+
+</html>

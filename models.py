@@ -58,14 +58,6 @@ class PlayerOff(db.Model):
     ftper = db.Column('ftper', db.Float)
     THptperD = db.Column('3ptperD', db.Float)
 
-    def tester(self):
-    	if self.minutes > 10:
-    		print("ten")
-    		return 10
-    	else:
-    		print("less")
-    		return "less"
-
 class touchDrives(db.Model):
     __tablename__ = 'touchDrives'
     __table_args__ = {'extend_existing': True}
@@ -133,80 +125,26 @@ def games(playername):
     defPlayer = PlayerDef.query.filter_by(name=playername).first()
     return defPlayer.gp
 
-def ppg(percentile):
-    lst = []
-    lstPts = []
-    lstNms = []
-    dict2 = {}
-    pts=0
-    denom=0
-    off1 = PlayerOff.query.all()
-    def1 = PlayerDef.query.all()
-    def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
-    off2 = PlayerAdvOff.query
-    for y in def2:
-        lst.append(y.name)
-
-    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
-    q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
-    for x in q1:
-        lstPts.append(x.ppg)
-        lstNms.append(x.name)
-    # for player in q1: 
-    #     pts+=player.ppg
-    #     denom+=1
-    return np.percentile(lstPts, percentile)
-
 def avg(att):
     lst = []
     lstAtt = []
     lstNms = []
-    dict2 = {}
-    pts=0
-    denom=0
-    off1 = PlayerOff.query.all()
-    def1 = PlayerDef.query.all()
+
     def2 = PlayerDef.query.filter(PlayerDef.gp>5).all()
-    off2 = PlayerAdvOff.query
     for y in def2:
         lst.append(y.name)
-
-    # joiner = db.Model.query(PlayerOff, PlayerDef).outerjoin(PlayerDef, PlayerOff.name==PlayerDef.name).all()
     q1 = PlayerOff.query.filter(PlayerOff.name.in_(lst)).all()
     for x in q1:
         lstAtt.append(x.att)
         lstNms.append(x.name)
-    # for player in q1: 
-    #     pts+=player.ppg
-    #     denom+=1
     return mean(lstAtt)
 
 def setDic():
-    defGP = []
-    #list of players in defStat with minimum games played: 5
     playDict = {}
-    defDict = {}
-    off2Dict = {}
-    lstPts = []
-    lstApg = []
-    lstTov = []
-    lstOrpg = []
-    lstfgper = []
-    lstMinutes = []
-    lstTHptAr = []
-    lstTWptmr = []
-    lstTHptr = []
-    lstFbpsr = []
-    lst = []
-
-    Ans = []
-
     off = PlayerOff.query.all()
     #all playerOff instances in offStat table
     def1 = PlayerDef.query.all()
     #all playerDef instances in defStat table
-    minGP = PlayerDef.query.filter(PlayerDef.gp>8).all()
-    #all playerDef instances in defStat table and > 4 gp
     off2 = PlayerAdvOff.query.all()
     #all playerAdvOff instances in advOff table
     off3 = touchDrives.query.all()
@@ -297,34 +235,11 @@ dic = setDic()
 
 def percentile(playerName, statDex):
     defGP = []
-    #list of players in defStat with minimum games played: 5
-    defDict = {}
-    off2Dict = {}
-    lstPts = []
-    lstApg = []
-    lstTov = []
-    lstOrpg = []
-    lstfgper = []
-    lstMinutes = []
-    lstTHptAr = []
-    lstTWptmr = []
-    lstTHptr = []
-    lstFbpsr = []
-    lst = []
-
-    Ans = []
-
-
     minGP = PlayerDef.query.filter(PlayerDef.gp>8).all()
+    lst = []
     #all playerDef instances in defStat table and > 4 gp
-
-
-    
-
     for y in minGP:
         defGP.append(y.name)
-    
-    
     for x, v in dic.items():
         #to create a list of all ppgs
         if x in defGP:
@@ -340,28 +255,38 @@ def percentile(playerName, statDex):
 def check(playerName):
     ans = []
     for x in range(59):
-        print(x)
         ans.append(percentile(playerName, x))
     return ans
 
-def printer(playerName):
+def checkerG(name, good):
     index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
-    check1 = check(playerName)
+    check1 = check(name)
+    lstG = []
     for x in range(len(check1)):
-        if check1[x] > 90.0:
-            print(index[x], check1[x])
-        if check1[x] < 20.0:
-            print(index[x], check1[x])
+        if check1[x] > good:
+            lstG.append((check1[x], index[x]))
+    return lstG
+
+def checkerB(name, bad):
+    index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
+    check1 = check(name)
+    lstB = []
+    for x in range(len(check1)):
+        if check1[x] < bad:
+            lstB.append((check1[x], index[x]))
+    return lstB
 
 
+# def printer(playerName, good, bad):
+#     index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
+#     check1 = check(playerName)
+#     lstG = []
+#     lstB = []
+#     for x in range(len(check1)):
+#         if check1[x] > good:
+#             lstG.append((index[x], check1[x])
 
-print(check("JJ Redick"))
-
-
-       
-    
-
-
+#     return lstG
 
 
 
