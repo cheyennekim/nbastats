@@ -54,9 +54,10 @@ def teams_page(some_team):
 
 @app.route('/search/<searched_player>')
 def search_page(searched_player):
-    aplayer = models.PlayerOff.query.filter_by(name = searched_player).first()
+    aplayer = models.IsOn.query.join(models.Player, models.IsOn.player == models.Player.name)\
+    .filter_by(name = searched_player).first()
+    
     return render_template('search.html', player = aplayer)
-
 
 
 
