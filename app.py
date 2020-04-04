@@ -1,13 +1,19 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from livereload import Server
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
 app.config.from_object('config')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 db = SQLAlchemy(app, session_options={'autocommit': False})
+app.debug = True
+
+
 
 import models
+
 
 
 @app.route('/')
@@ -35,39 +41,10 @@ def some_player_page(some_player):
 	pD = models.PlayerDef.query.filter_by(name=some_player).first()
 
 
-	# index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
-	
-	# sevFiveCheck = models.check(some_player, 75.0, 20.0)
-	# sevFive = []
-	# twenty = []
-
-	# for x in range(len(sevFiveCheck)):
-	# 	if sevFiveCheck[x] == 1:
-	# 		sevFive.append(x)
-	# 	if sevFiveCheck[x] == -1:
-	# 		twenty.append(x)
+	goodStats = models.checkerG(some_player, 90.0)
 
 
-	# ninetyCheck = models.check(some_player, 90.0, 10.0)
-	# ninety = []
-	# ten = []
-
-	# for x in range(len(ninetyCheck)):
-	# 		if ninetyCheck[x] == 1:
-	# 			ninety.append(x)
-	# 		if ninetyCheck[x] == -1:
-	# 			ten.append(x)
-
-	tot = "test"
-	type1="test"
-	percentFG = "test"
-	boo="test"
-
-
-
-
-	return render_template('player.html', player = Player, player1 = PlayerAdv, pDef = pD, str = tot, type = type1, last = percentFG, verdict = boo)
-	# return render_template('player.html')
+	return render_template('readyplayer.html', player = Player, player1 = PlayerAdv, pDef = pD, lstG = goodStats)
 
 @app.route('/allteams/<some_team>')
 def teams_page(some_team):
@@ -75,7 +52,12 @@ def teams_page(some_team):
 	players = db.session.execute('select * from isOn where team= :val', {'val': some_team})
 	return render_template('team.html', team=Teams, players=players)
 
-@app.route('/search/<search>')
+@app.route('/search/<searched_player>')
 def search_page(searched_player):
-    aplayer = models.PlayerOff.query.filter_by(name=searched_player).first()
+    aplayer = models.PlayerOff.query.filter_by(name = searched_player).first()
     return render_template('search.html', player = aplayer)
+
+
+
+
+
