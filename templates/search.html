@@ -1,5 +1,7 @@
-<html>
-<header>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -86,14 +88,10 @@
   <!-- <a class="nav-link js-scroll-trigger" href="{{url_for('all_players')}}">NBA Stats Home</a>
 </li> -->
 
-<p> The player you searched: <a href="{{url_for('some_player_page', some_player=player.name)}}"/a>
-  {{player.name}}
-  <br />
-    Team:<a href="{{url_for('teams_page', some_team=player.team)}}"/a>
+<p> The player you searched: <a href="{{url_for('some_player_page', some_player=player.player)}}">{{player.player}}</a>
+    Team:{{player.team}}
 
-{{player.team}}
-<br />
-</p>
+
 
 
 
