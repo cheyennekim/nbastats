@@ -1,136 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
+<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="first.css">
+<nav class="navbar shadow-sm navbar-transparent navbar-expand-lg navbar-relative" style="border-bottom: 0.5px;  padding-bottom: -50px; margin-top: -10px; z-index: 1;">
+  <a class="navbar-brand" href="/">
+    <img src="https://i.imgur.com/FiAyjEj.png" width="100" height="40" class="d-inline-block align-top" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+  aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <u1 class="navbar-nav m1-auto">
+    <div class="nav navbar-nav">
+      <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="{{url_for('allteams_page')}}">Teams</a>
+      <a class="nav-item nav-link" href="{{url_for('allplayer_page')}}">Players</a>
+   </u1>
+    </div>
+  </div>
+</nav>
 
-<head>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-   <title>Seached NBA Player</title>
-</head>
-
-<style type="text/css">
-    html {
-      font-family: sans-serif;
-      line-height: 1.15;
-      -webkit-text-size-adjust: 100%;
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    }
-
-
-
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #333;
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      border-radius: 5px 5px 5px 5px;
-      /*height: 70px;*/
-    }
-    li {
-      float: left;
-      height: 70px;
-      border-color: black;
-      font-size: larger;
-    }
-    li a {
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 20px 16px;
-      text-decoration: none;
+<br><br>
+<br><br>
 
 
-    }
-    li a:hover {
-      background-color: #111;
-      color: white;
 
-    }
-    .master {
-      background-color: darkorange;
-      color: black;
-      font-weight: bolder;
-    }
-    .header {
-      text-align: center;
-      border-radius: 5px 5px 0 0;
-      text-shadow: 5px 5px 10px darkorange;
-      margin-bottom: 60px;
-      font-size: xx-large;
-    }
-    a {
-      height: 70px;
-    }
+
+
+<style>
+.nav-link{
+  color: #484848;
+  font-size: 16px;
+  margin-top: 11px;
+  padding-bottom: 15px;
+  margin-bottom: -5px;
+  height: 100%;
+  font-weight: 600;
+  display: block;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.nav-link:hover {
+  color: #484848;
+  border-bottom: 2px solid #FA8320;
+}
+
+.navbar-brand{
+  color: #484848;
+  font-size: 20px;
+  margin-top: 5px;
+  padding-bottom: 10px;
+  margin-bottom: -15px;
+  height: 100%;
+  font-weight: 600;
+  display: block;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+ .navbar-brand:hover {
+  color: #484848;
+  border-bottom: 2px solid #FA8320;
+}
+
 </style>
+
 
   <body>
 
    <!-- Navigation -->
  {% block content %}
- <div class ="header">
+<center>
    <h2>Welcome to NBA Stats</h2>
    <p>Here is the NBA player you searched. Click the player to see more!</p>
- </div>
 
- <ul class="navigation">
-    <li><a class = "master" href= "{{url_for('all_players')}}">NBA Stats Home</a></li>
-    <li><a href = "{{url_for('allteams_page')}}">Teams</a></li>
-    <li><a href="{{url_for('allplayer_page')}}">Players</a></li>
 
-  </ul>
+
   <!-- <a class="nav-link js-scroll-trigger" href="{{url_for('all_players')}}">NBA Stats Home</a>
 </li> -->
 
-<p> The player you searched: <a href="{{url_for('some_player_page', some_player=player.player)}}">{{player.player}}</a>
-    Team:{{player.team}}
+<p> The player you searched: <a href="{{url_for('some_player_page', some_player=player.name)}}"/a>
+  {{player.name}}
+  <br />
+    Team:<a href="{{url_for('teams_page', some_team=player.team)}}"/a>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{{player.team}}
+<br />
+</p>
+</center>
 
   {% endblock %}
 
