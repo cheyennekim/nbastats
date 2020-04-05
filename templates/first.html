@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<center>
+<!-- <center>
 <div class="input-group mb-3" style = "width:50%">
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1" style = "border-top-left-radius: 30px; border-bottom-left-radius:30px;" ><i class="fa fa-search"></i></span>
@@ -38,9 +38,16 @@
   <input type="text" class="form-control" placeholder="Search"  style="width: 50%; border-top-right-radius: 30px; border-bottom-right-radius:30px; 
   border: solid space#e3e3e3 1px;">
 </div>
-</center>
+</center> -->
 
-<div data-v-5bc77922="" class="col-md-12 text-center"><button data-v-5bc77922="" class="btn" style="background: rgb(244, 244, 244); color: rgb(95, 99, 104); font-weight: 500; font-size: 18px; border-radius: 7px; margin-top: 30px;">Search</button></div>
+<center>
+{% from "_formhelpers.html" import render_field %}
+<form method="post" >
+{{ render_field(form.search, class="form-control") }}
+  <p><input type="submit" value="Search" class="btn" style="background: rgb(244, 244, 244); color: rgb(95, 99, 104); font-weight: 500; font-size: 18px; border-radius: 7px; margin-top: 30px;" >
+</p></form>
+</doctype>
+</center>
 
 <style>
 .nav-link{
@@ -83,4 +90,8 @@
   border-bottom: 2px solid #FA8320;
 }
 
+
+    .form-control{
+        width: 100%;
+    }
 </style>

@@ -1,0 +1,30 @@
+<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="first.css">
+
+{% macro render_field(field) %}
+<div class="input-group mb-3" style = "width:50%">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1" ><i class="fa fa-search"></i></span>
+    </div>
+    {{ field.label }}
+    {{ field(**kwargs)|safe }} 
+    <!--<input type="text" class="form-control" style="width: 50%; border-top-right-radius: 30px; border-bottom-right-radius:30px; 
+    border: solid space#e3e3e3 1px; border-left: none; margin-left:-5px; z-index: 2;"> -->
+  </div>
+    {% if field.errors %}
+        <ul class="errors">
+        {% for error in field.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+<style>
+    .form-control{
+        width: 100%;
+        border-top-right-radius: 30px;
+         border-bottom-right-radius:30px;
+    }
+</style>
