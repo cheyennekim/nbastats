@@ -40,13 +40,40 @@ def allteams_page():
 
 @app.route('/<some_player>')
 def some_player_page(some_player):
-    PlayerAdv = models.PlayerAdvOff.query.filter_by(name=some_player).first()
     Player = models.PlayerOff.query.filter_by(name=some_player).first()
-    pD = models.PlayerDef.query.filter_by(name=some_player).first()
-
+    offDex = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59]
+    offNums = []
     goodStats = models.checkerG(some_player, 90.0)
 
-    return render_template('readyplayer.html', player=Player, player1=PlayerAdv, pDef=pD, lstG=goodStats)
+    for x in goodStats:
+        if x[2] in offDex:
+            offNums.append((x[0], x[1]))
+
+    # offNums=[('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0)]
+
+    return render_template('readyplayer.html', player=Player, lstG=offNums)
+
+@app.route('/<some_player>/defense')
+def def_indy(some_player):
+    Player = models.PlayerOff.query.filter_by(name=some_player).first()
+    defDex = [28,29,30,31,32,33,34,35,36,37,38,40]    
+    defNums = []
+    goodStats = models.checkerG(some_player, 90.0)
+    for x in goodStats:
+        if x[2] in defDex:
+            defNums.append((x[0], x[1]))
+    return render_template('defensive.html', player=Player, lstGD=defNums)
+
+@app.route('/<some_player>/scoutingreport')
+def scouting_report(some_player):
+    Player = models.PlayerOff.query.filter_by(name=some_player).first()
+    defDex = [28,29,30,31,32,33,34,35,36,37,38,39]
+    defNums = []
+    goodStats = models.checkerG(some_player, 90.0)
+    for x in goodStats:
+        if x[2] in defDex:
+            defNums.append((x[0], x[1]))
+    return render_template('defensive.html', player=Player, lstGD=defNums)
 
 
 @app.route('/allteams/<some_team>')
@@ -56,6 +83,7 @@ def teams_page(some_team):
     players = db.session.execute(
         'select * from isOn where team= :val', {'val': some_team})
     return render_template('team.html', team=Teams, players=players)
+
 
 
 @app.route('/search/<searched_player>')

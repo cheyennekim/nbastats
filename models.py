@@ -4,6 +4,7 @@ import numpy as np
 from statistics import mean, median
 from scipy import stats
 import difflib
+import pandas as pd
 
 
 class Player(db.Model):
@@ -151,7 +152,7 @@ def setDic():
 
     for r in off:
         playDict[r.name] = [r.ppg, r.apg, r.tov, r.orpg, r.fgper, r.minutes, r.THptAr, r.TWptmr, r.THptr, r.fbpsr, r.ftr, r.pipr, r.fgmUass, r.THptAtt, r.THptper, r.ftAtt, r.ftper, r.THptperD]
-    
+        
    
     for p in off2:
         if p.name in playDict:
@@ -191,9 +192,13 @@ def setDic():
             playDict[k.name].append(k.sixtTwentyPer)  
             playDict[k.name].append(k.twenFourPer)  
             playDict[k.name].append(k.gp) 
+            if k.gp < 5:
+                playDict[k.name].append(0)
+            else:
+                playDict[k.name].append(1)
             playDict[k.name].append(k.fgDiffPer) 
         else:
-            playDict[k.name] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            playDict[k.name] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             playDict[k.name].append(k.drpg) 
             playDict[k.name].append(k.drebPer)
             playDict[k.name].append(k.spg)  
@@ -206,7 +211,21 @@ def setDic():
             playDict[k.name].append(k.twenFourPer)  
             playDict[k.name].append(k.gp) 
             playDict[k.name].append(k.fgDiffPer) 
-
+    for x,y in playDict.items():
+        if (len(y) != 41):
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
     for k in off3:
         if k.name in playDict:
             playDict[k.name].append(k.touches) 
@@ -229,46 +248,80 @@ def setDic():
             playDict[k.name].append(k.dAstPer)  
             playDict[k.name].append(k.dTovPer) 
             playDict[k.name].append(k.dFoulPer) 
-
+        else:
+            playDict[k.name] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    for x,y in playDict.items():
+        if (len(y) != 60):
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+            playDict[x].append(0)
+  
     return playDict
 dic = setDic()
-
-def percentile(playerName, statDex):
-    defGP = []
-    minGP = PlayerDef.query.filter(PlayerDef.gp>8).all()
-    lst = []
-    #all playerDef instances in defStat table and > 4 gp
-    for y in minGP:
-        defGP.append(y.name)
-    for x, v in dic.items():
-        #to create a list of all ppgs
-        if x in defGP:
-            lst.append(v[statDex])
-
-    correct = dic[playerName]
+testlist=[]
+stat_list = []
+#stat_list in form of: [ (1, (3.0, 4.5, 5.0)), (2, (6.0, 2.0, 4.9))] with first num representing what statistic and list representing all values from all players
+df = pd.DataFrame(data=dic)
+for i in range((df.shape[0])): 
+    stat_list.append((i,[]))
+    for x in range(df.shape[1]):
+        if df.iloc[39, x] == 1:
+            stat_list[i][1].append(df.iloc[i,x])
 
 
-    return round((stats.percentileofscore(lst, correct[statDex])), 2)
+# for x,y in dic.items():
+#     if y[39]==1:
+#         testlist.append(y[28])
 
 
+# print("what we got", stats.percentileofscore(stat_list[28][1], 9))
+# print("what old got", stats.percentileofscore(testlist, 9))
 
-def check(playerName):
+def percentile(playerName):
     ans = []
-    for x in range(59):
-        ans.append(percentile(playerName, x))
+    for i in range(df.shape[0]):
+        num = round(stats.percentileofscore((stat_list[i][1]), df.loc[i,playerName]), 2)
+        ans.append(num)
     return ans
 
 def checkerG(name, good):
-    index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
-    check1 = check(name)
+    index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 40: "fgDiffPer", 41: "touches", 42: "fcTouch", 43: "timeOfpos", 44: "avgSecTouch", 45: "ppTouch", 46: "elbowTouch", 47: "postUps", 48: "paintTouch", 49: "ppElb", 50: "ppPost", 51: "ppPaint", 52: "drives", 53: "dFGA", 54: "dFGper", 55: "dpts", 56: "dPassPer", 57: "dAstPer", 58: "dTovPer", 59: "dFoulPer"}
+    check1 = percentile(name)
     lstG = []
     for x in range(len(check1)):
-        if check1[x] > good:
-            lstG.append((check1[x], index[x]))
+        if x != 39:
+            if check1[x] > good:
+                lstG.append((check1[x], index[x], x))
     return lstG
 
 def checkerB(name, bad):
-    index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
+    index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 40: "fgDiffPer", 41: "touches", 42: "fcTouch", 43: "timeOfpos", 44: "avgSecTouch", 45: "ppTouch", 46: "elbowTouch", 47: "postUps", 48: "paintTouch", 49: "ppElb", 50: "ppPost", 51: "ppPaint", 52: "drives", 53: "dFGA", 54: "dFGper", 55: "dpts", 56: "dPassPer", 57: "dAstPer", 58: "dTovPer", 59: "dFoulPer"}
     check1 = check(name)
     lstB = []
     for x in range(len(check1)):
@@ -276,7 +329,8 @@ def checkerB(name, bad):
             lstB.append((check1[x], index[x]))
     return lstB
 
-
+def2 = PlayerDef.query.filter_by(name='Dwight Howard').first()
+print(def2.oppPIP)
 # def printer(playerName, good, bad):
 #     index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
 #     check1 = check(playerName)
