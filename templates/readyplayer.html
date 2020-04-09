@@ -21,6 +21,13 @@
     grid-gap: 10px;
     padding: 10px;
   }
+  .container1 {
+    overflow: visible;
+  }
+
+  .container1 img {
+    vertical-align: middle;
+  }
 
   .key-stats-container {
     height:300px;
@@ -32,8 +39,7 @@
   }
 
   .key-table {
-    grid-column-start: 2
-    grid-column-end: 4;
+
     height:300px;
     width:200px;
     border-collapse: collapse;
@@ -47,10 +53,10 @@
   }
 
   .key-table td:hover { /* th:hover also if you wish */
-  background: lightgrey;
+    background: lightgrey;
   }
   table.key-table tbody tr:hover {
-  background: lightgrey;
+    background: lightgrey;
   }
 
   .key-table tbody {
@@ -79,7 +85,7 @@
     background-color: darkorange;
   }
 
-   .key-table tbody tr:last-of-type {
+  .key-table tbody tr:last-of-type {
     border-bottom: 2px solid darkorange;    
   }
 
@@ -95,8 +101,7 @@
 
 
   .player-table {
-    grid-column-start: 2;
-    grid-column-end: 4;
+
     border-collapse: collapse;
     margin-left: auto;
     margin-right: auto;
@@ -232,6 +237,62 @@
     display: flex<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>;
   }
 
+  .image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .icon {
+    position: relative;
+    width: 100%;
+    display:inline-block;
+    border-radius: 50%
+  }
+
+  .icon:hover .overlay {
+    opacity: 1;
+  }
+
+  .icon:hover #nums {
+    display: block;
+  }
+
+  .icon #nums {
+   display: none;
+   position: absolute;
+   width: auto;
+   height: auto;
+   padding: 5px;
+   border: 1px solid blue;  
+   background-color: lightblue; 
+
+ }
+
+ .overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #008CBA;
+}
 
 </style>
 
@@ -257,6 +318,19 @@
   </ul>
 </div>
 
+
+<div class = "container1">
+  {% for k in iconset %}
+  <div class = "icon" style="width:115px;height:115px">
+    <img src={{k[0]}} class="iconimage" style="width:115px;height:115px;border-radius: 50%;background: #5B7994; width: 115; box-shadow: 0 9px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); text-align: center;">
+    <div id="nums">{{k[2]}}</div>
+
+    <div class="overlay">
+      <div class="text">{{k[1]}}</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 
 <div class = "container">
   <div class = "key-stats-container">
