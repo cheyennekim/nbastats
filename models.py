@@ -288,7 +288,9 @@ testlist=[]
 stat_list = []
 #stat_list in form of: [ (1, (3.0, 4.5, 5.0)), (2, (6.0, 2.0, 4.9))] with first num representing what statistic and list representing all values from all players
 df = pd.DataFrame(data=dic)
+
 for i in range((df.shape[0])): 
+    #this is to input NBA wholistic data to calculate individual percentiles
     stat_list.append((i,[]))
     for x in range(df.shape[1]):
         if df.iloc[39, x] == 1:
@@ -329,8 +331,35 @@ def checkerB(name, bad):
             lstB.append((check1[x], index[x]))
     return lstB
 
-def2 = PlayerDef.query.filter_by(name='Dwight Howard').first()
-print(def2.oppPIP)
+def iconSet(checkerG, player):
+    ftSpecial = "https://www.iconfinder.com/icons/492111/903465/512/raster?token=1586380714-QbLpWl7tVey55Zfk6z9tL10JSL%2Fk1TeYK3Ro6oAr9UU%3D"
+    threeBall = "https://image.flaticon.com/icons/svg/60/60481.svg"
+    quickWball = "https://www.kindpng.com/picc/m/10-101614_fast-icon-free-icons-alarm-clock-going-off.png"
+    driver = "https://www.iconfinder.com/icons/505432/918468/512/raster?token=1586400249-uEJSMrug1Q9zN94jOYQrbKr3OimjPemw88%2B6d6wpGUI%3D"
+    pos = "https://www.iconfinder.com/icons/1171862/1607979/512/raster?token=1586402982-r8wJkebJ1W35Y%2FL9FQkvm4U9sCa3zObHwSbO9IuZm4I%3D"
+    time = "https://www.iconfinder.com/icons/3756402/4223625/512/raster?token=1586402978-G3%2BtAapZ5eIqvePuuTaQwApaveV5XFYMk%2BM%2Bi%2BOPZLA%3D"
+
+    
+
+    linkitylist=[]
+    if checkerG[10] > 75:
+        linkitylist.append((ftSpecial, "Free Throw Specialist", "Percentage of Points from Free Throws: " + str(df.loc[10,player])))
+    if checkerG[14] > 75:
+        linkitylist.append((threeBall, "Long Range Specialist", "Percentage of Points from Three: " + str(df.loc[14,player])))
+    if checkerG[18] > 75 and (checkerG[53] > 75 or checkerG[52] > 75):
+        linkitylist.append((driver, "Driver", "Driving PPG: " + str(df.loc[18,player])))
+    if checkerG[43] > 75:
+        linkitylist.append((pos, "Ball Dominant", "Time of Possession per game: " + str(df.loc[43,player])))
+    if checkerG[44] > 75:
+        linkitylist.append((time, "Ball Holder", "Average Time per Possession: " + str(df.loc[44,player])))
+    return linkitylist
+# print(iconSet(percentile("Jayson Tatum")))
+
+
+
+
+# Player = PlayerOff.query.filter_by(name="Patrick Beverley").first()    
+
 # def printer(playerName, good, bad):
 #     index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 39: "fgDiffPer", 40: "touches", 41: "fcTouch", 42: "timeOfpos", 43: "avgSecTouch", 44: "ppTouch", 45: "elbowTouch", 46: "postUps", 47: "paintTouch", 48: "ppElb", 49: "ppPost", 50: "ppPaint", 51: "drives", 52: "dFGA", 53: "dFGper", 54: "dpts", 55: "dPassPer", 56: "dAstPer", 57: "dTovPer", 58: "dFoulPer"}
 #     check1 = check(playerName)
@@ -341,8 +370,19 @@ print(def2.oppPIP)
 #             lstG.append((index[x], check1[x])
 
 #     return lstG
+# ans = []
+# for i in range(df.shape[0]):
+#         num = round(stats.percentileofscore((stat_list[i][1]), df.loc[i,'Patrick Beverley']), 2)
+#         ans.append(num)
 
+# print(ans)
+# nex = []
+# for x,y in dic.items():
+#     if y[39]==1:
+#         nex.append(y[8])
+# print(stats.percentileofscore(nex, Player.THptr))
 
+# print(round(stats.percentileofscore(nex, Player.TWptmr, 2))
 
 
         
