@@ -1,10 +1,12 @@
 from sqlalchemy import sql, orm
 from app import db
+import os
 import numpy as np
 from statistics import mean, median
 from scipy import stats
 import difflib
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class Player(db.Model):
@@ -332,28 +334,43 @@ def checkerB(name, bad):
     return lstB
 
 def iconSet(checkerG, player):
-    ftSpecial = "https://www.iconfinder.com/icons/492111/903465/512/raster?token=1586380714-QbLpWl7tVey55Zfk6z9tL10JSL%2Fk1TeYK3Ro6oAr9UU%3D"
-    threeBall = "https://image.flaticon.com/icons/svg/60/60481.svg"
+    ftSpecial = "whistle.svg"
+    threeBall = "target.svg"
     quickWball = "https://www.kindpng.com/picc/m/10-101614_fast-icon-free-icons-alarm-clock-going-off.png"
-    driver = "https://www.iconfinder.com/icons/505432/918468/512/raster?token=1586400249-uEJSMrug1Q9zN94jOYQrbKr3OimjPemw88%2B6d6wpGUI%3D"
-    pos = "https://www.iconfinder.com/icons/1171862/1607979/512/raster?token=1586402982-r8wJkebJ1W35Y%2FL9FQkvm4U9sCa3zObHwSbO9IuZm4I%3D"
-    time = "https://www.iconfinder.com/icons/3756402/4223625/512/raster?token=1586402978-G3%2BtAapZ5eIqvePuuTaQwApaveV5XFYMk%2BM%2Bi%2BOPZLA%3D"
-
+    driver = "driver.svg"
+    pos = "possession.svg"
+    time = "time.svg"
     
 
     linkitylist=[]
-    if checkerG[10] > 75:
+    if checkerG[10] > 80:
         linkitylist.append((ftSpecial, "Free Throw Specialist", "Percentage of Points from Free Throws: " + str(df.loc[10,player])))
-    if checkerG[14] > 75:
-        linkitylist.append((threeBall, "Long Range Specialist", "Percentage of Points from Three: " + str(df.loc[14,player])))
-    if checkerG[18] > 75 and (checkerG[53] > 75 or checkerG[52] > 75):
+    if checkerG[14] > 80:
+        linkitylist.append((threeBall, "Long Range Specialist", "Three Point Percentage: " + str(df.loc[14,player])))
+    if checkerG[18] > 80 and (checkerG[53] > 80 or checkerG[52] > 80):
         linkitylist.append((driver, "Driver", "Driving PPG: " + str(df.loc[18,player])))
-    if checkerG[43] > 75:
+    if checkerG[43] > 85:
         linkitylist.append((pos, "Ball Dominant", "Time of Possession per game: " + str(df.loc[43,player])))
-    if checkerG[44] > 75:
+    if checkerG[44] > 80:
         linkitylist.append((time, "Ball Holder", "Average Time per Possession: " + str(df.loc[44,player])))
     return linkitylist
 # print(iconSet(percentile("Jayson Tatum")))
+
+def pieCharter(some_player):
+    plt.close('all')
+    labels = 'Free Throws', 'Mid Range', 'Three Pointers', 'Paint', 'Fast Break'
+    Player = PlayerOff.query.filter_by(name=some_player).first()
+    sizes = [Player.ftr, Player.TWptmr, Player.THptr, Player.pipr, Player.fbpsr]
+    colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'magenta']
+
+    # Plot
+    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.axis('equal')
+    # plt.savefig('/Users/daniellanda/Desktop/NBA_316/nbastats/templates/' + some_player + 'scoreDist.svg')
+    strFile = "/Users/daniellanda/Desktop/NBA_316/nbastats/static/iscoreDist_" + Player.name + ".svg"
+    plt.savefig(strFile)
+    plt.close()
+    return None
 
 
 

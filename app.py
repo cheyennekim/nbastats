@@ -50,12 +50,12 @@ def some_player_page(some_player):
     for x in goodStats:
         if x[2] in offDex:
             offNums.append((x[0], x[1]))
-
+    models.pieCharter(some_player)
 
 
     # offNums=[('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0)]
 
-    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = linkitylst)
+    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = linkitylst, chart = '/static/iscoreDist.png', name = Player.name)
 
 @app.route('/<some_player>/defense')
 def def_indy(some_player):
