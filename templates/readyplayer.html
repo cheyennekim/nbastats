@@ -322,7 +322,7 @@
 <div class = "container1">
   {% for k in iconset %}
   <div class = "icon" style="width:115px;height:115px">
-    <img src={{k[0]}} class="iconimage" style="width:115px;height:115px;border-radius: 50%;background: #5B7994; width: 115; box-shadow: 0 9px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); text-align: center;">
+    <img src=static/{{k[0]}} class="iconimage" style="width:115px;height:115px;border-radius: 50%;background: #5B7994; width: 115; box-shadow: 0 9px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); text-align: center;">
     <div id="nums">{{k[2]}}</div>
 
     <div class="overlay">
@@ -331,7 +331,7 @@
   </div>
   {% endfor %}
 </div>
-
+<img src="static/iscoreDist_{{name}}.svg">
 <div class = "container">
   <div class = "key-stats-container">
     <h1> Key Numbers </h1>
