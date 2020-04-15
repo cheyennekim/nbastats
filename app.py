@@ -46,16 +46,23 @@ def some_player_page(some_player):
     goodStats = models.checkerG(some_player, 90.0)
     check1 = models.percentile(some_player)
 
+    leader = models.leagueLead(check1)
+    lgleader = []
+    for x in leader:
+        if x[0] in offDex:
+            lgleader.append(x)
+
     linkitylst = models.iconSet(check1, some_player)
     for x in goodStats:
         if x[2] in offDex:
             offNums.append((x[0], x[1]))
     models.pieCharter(some_player)
 
+    top = models.offtopThree(check1)
 
     # offNums=[('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0)]
 
-    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = linkitylst, chart = '/static/iscoreDist.png', name = Player.name)
+    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = linkitylst, chart = '/static/scoreDist.png', name = Player.name, lead = lgleader)
 
 @app.route('/<some_player>/defense')
 def def_indy(some_player):
