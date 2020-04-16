@@ -100,10 +100,9 @@ def teams_page(some_team):
 
 @app.route('/search/<searched_player>')
 def search_page(searched_player):
-    aplayer = models.IsOn.query.join(models.Player, models.IsOn.player == models.Player.name)\
-    .filter_by(name = searched_player).first()
+    searched_player = "%{}%".format(searched_player.lower())
+    aplayers = models.IsOn.query.join(models.Player, models.IsOn.player == models.Player.name)\
+    .filter(models.Player.name.ilike(searched_player)).all()
     
-    return render_template('search.html', player = aplayer)
-
-
+    return render_template('search.html', players = aplayers)
 
