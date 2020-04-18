@@ -131,14 +131,10 @@ class mesA(db.Model):
     name = db.Column('player', db.String(20), db.ForeignKey('player'), primary_key=True)
     yearStart = db.Column('yearStart', db.Float)
     position = db.Column('position', db.String(80))
-    heightFT = db.Column('heightFT', db.Float)
-    heightIN = db.Column('heightIN', db.Float)
-    heightCM = db.Column('heightCM', db.Float)
     wingspan = db.Column('wingspan', db.Float)
     standReach = db.Column('standReach', db.Float)
     handLen = db.Column('handLen', db.Float)
     handWid = db.Column('handWid', db.Float)
-    weight = db.Column('weight', db.Float)
     bodyFat = db.Column('bodyFat', db.Float)
     college = db.Column('college', db.String(80))
 
@@ -153,6 +149,15 @@ class mesB(db.Model):
     bench = db.Column('bench', db.Float)
     agility = db.Column('agility', db.Float)
     sprint = db.Column('sprint', db.Float)
+
+class mesC(db.Model):
+    __tablename__ = 'mesC'
+    __table_args__ = {'extend_existing': True}
+    name = db.Column('name', db.String(20), db.ForeignKey('player'), primary_key=True)
+    age = db.Column('age', db.Float)
+    height = db.Column('height', db.String(80))
+    weight = db.Column('weight', db.Float)
+
     
 def games(playername):
     __table_args__ = {'extend_existing': True}
@@ -330,10 +335,121 @@ for i in range((df.shape[0])):
         if (df.iloc[39, x] == 1) and (df.iloc[5, x] > 5):
             stat_list[i][1].append(df.iloc[i,x])
 
+def setPhysdic():
+    dict = {}
+    MA = mesA.query.all()
+    MB = mesB.query.all()
+    MC = mesC.query.all()
 
-# for x,y in dic.items():
-#     if y[39]==1:
-#         testlist.append(y[28])
+    for p in MC:
+        dict[p.name] = [p.age, p.height, p.weight]
+    for x in MA:
+        if x.name in dict:
+            dict[x.name].append(x.yearStart)
+            if x.position == 'G':
+                dict[x.name].append(0)
+            elif x.position == 'F-G' or x.position == 'G-F':
+                dict[x.name].append(1)
+            elif x.position == 'F':
+                dict[x.name].append(2)
+            elif x.position == 'F-C' or x.position == 'C-F':
+                dict[x.name].append(3)
+            elif x.position == 'C':
+                dict[x.name].append(4)
+            else:
+                dict[x.name].append(5)
+            dict[x.name].append(x.wingspan)
+            dict[x.name].append(x.standReach)
+            dict[x.name].append(x.handLen)
+            dict[x.name].append(x.handWid)
+            dict[x.name].append(x.bodyFat)
+        else:
+            dict[x.name] = [0,0,0]
+            dict[x.name].append(x.yearStart)
+            if x.position == 'G':
+                dict[x.name].append(0)
+            elif x.position == 'F-G' or x.position == 'G-F':
+                dict[x.name].append(1)
+            elif x.position == 'F':
+                dict[x.name].append(2)
+            elif x.position == 'F-C' or x.position == 'C-F':
+                dict[x.name].append(3)
+            elif x.position == 'C':
+                dict[x.name].append(4)
+            else:
+                dict[x.name].append(5)
+            dict[x.name].append(x.wingspan)
+            dict[x.name].append(x.standReach)
+            dict[x.name].append(x.handLen)
+            dict[x.name].append(x.handWid)
+            dict[x.name].append(x.bodyFat)
+    for k in MB:
+        if k.name in dict:
+            if len(dict[k.name]) == 3:
+                dict[k.name].append(0)
+                dict[k.name].append(0)
+                dict[k.name].append(0)
+                dict[k.name].append(0)
+                dict[k.name].append(0)
+                dict[k.name].append(0)
+                dict[k.name].append(0)
+            dict[k.name].append(k.pick) 
+            dict[k.name].append(k.vert)
+            dict[k.name].append(k.vertNostep) 
+            dict[k.name].append(k.bodyFat) 
+            dict[k.name].append(k.bench) 
+            dict[k.name].append(k.agility) 
+            dict[k.name].append(k.sprint) 
+        else:
+            dict[k.name] = [0,0,0,0,0,0,0,0,0,0]
+            dict[k.name].append(k.pick) 
+            dict[k.name].append(k.vert)
+            dict[k.name].append(k.vertNostep) 
+            dict[k.name].append(k.bodyFat) 
+            dict[k.name].append(k.bench) 
+            dict[k.name].append(k.agility) 
+            dict[k.name].append(k.sprint)
+
+    for x,y in dict.items():
+        if len(y) == 3:
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+        if len(y) == 10:
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+            dict[x].append(0)
+
+    return dict
+dict2 = setPhysdic()
+for x,y in dict2.items():
+    if len(y) != 17:
+        print(x)
+        print(y)
+dfPhys = pd.DataFrame(data=dict2)
+l = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+for x,y in dic.items():
+    if x != '\ufeffBobby Portis':
+        for k in range(17):
+            if dict2[x][k] != None and dict2[x][k] != 0:
+                l[k] += 1
+# print(l)
+
 
 
 # print("what we got", stats.percentileofscore(stat_list[28][1], 9))
@@ -456,6 +572,18 @@ scalar = MinMaxScaler()
 dfScale[[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,28,29,30,31,32,33,34,35,36,37,38,40]] = scalar.fit_transform(dfScale[[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,28,29,30,31,32,33,34,35,36,37,38,40]])
 rowLabels = dfScale.index.values
 
+dfScale2 = dfPhys.T
+for x in range(17):
+    if x!=4:
+        dfScale2[x].replace([0],[None], inplace = True)
+
+for col in dfScale2.columns:
+    if col != 4 and col != 10:
+        dfScale2[col]=(dfScale2[col]-dfScale2[col].min())/(dfScale2[col].max()-dfScale2[col].min())
+rowLabels2 = dfScale2.index.values
+
+# dfScale2[[0,1,2,3,5,6,7,8,9,11,12,13,14,15,16,17]] = scalar.fit_transform(dfScale2[[0,1,2,3,5,6,7,8,9,11,12,13,14,15,16,17]])
+
 def euc(lst1, lst2):
     sum = 0
     for x in range(len(lst1)):
@@ -464,7 +592,7 @@ def euc(lst1, lst2):
         sum+=sq
     return math.sqrt(sum)
 
-def kNear(player, k):
+def kNearProduction(player, k):
     dude = dfScale.loc[player].values.tolist()
     closest = {}
     closestNames = []
@@ -486,12 +614,40 @@ def kNear(player, k):
     ans.append(similarity)
     return ans
 
+def kNearPhys(player, k):
+    df3 = dfScale2[[0, 1, 2, 4]].copy()
+    dude = df3.loc[player].values.tolist()
+    closest = {}
+    closestNames = []
+    minu = 100
+    ans = []
+    similarity = []
+    for x in rowLabels2:
+        if x != player:
+            comp = df3.loc[x].values.tolist()
+            dist = euc(dude, comp)
+            if dist < minu:
+                minu = dist
+                closest[x] = dist
+                closestNames.append(x)
+    kclosest = closestNames[-1*k:]
+    for k in kclosest:
+        similarity.append(closest[k])
+    ans.append(kclosest)
+    ans.append(similarity)
+    return ans
+
+def kNearPlayStyle(player, k):
+    None
+
+
+# print(kNearPhys("JJ Redick", 3))
+
 # print(dfScale.loc[['James Harden']])
 # B = pd.Series(dfScale.loc[['LeBron James']])
 xx = dfScale.loc[['LeBron James']]
 y = dfScale.loc[['James Harden']]
-dude = dfScale.loc["James Harden"].values.tolist()
-print(kNear("Stephen Curry", 3))
+dude = dfScale.loc["Tacko Fall"].values.tolist()
 # dude1 = dfScale.loc["LeBron James"].values.tolist()
 # print(euc(dude,dude1))
 # dude = dfScale.loc["Russell Westbrook"].values.tolist()
