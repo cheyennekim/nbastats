@@ -43,26 +43,35 @@ def some_player_page(some_player):
     Player = models.PlayerOff.query.filter_by(name=some_player).first()
     offDex = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59]
     offNums = []
+    #lst of stat percentiles greater than 90 using goodStats
     goodStats = models.checkerG(some_player, 90.0)
-    check1 = models.percentile(some_player)
-
-    leader = models.leagueLead(check1)
+    #lst of all stat percentiles greater than 90
+    pcent = models.percentile(some_player)
+    #lst of each stat percentile
+    leader = models.leagueLead(pcent)
+    #lst of each stat that is exactly 100th percentile
     lgleader = []
+    #lst of each offensive league leading stat
     for x in leader:
+        #get offensive league leading stats
         if x[0] in offDex:
             lgleader.append(x)
 
-    linkitylst = models.iconSet(check1, some_player)
+    iconlst = models.iconSet(pcent, some_player)
+    #list of icons with statistical descriptions
     for x in goodStats:
+        #creating lst of stat percentiles greater than 90
         if x[2] in offDex:
             offNums.append((x[0], x[1]))
+    
     models.pieCharter(some_player)
+    models.compOff(some_player)
 
-    top = models.offtopThree(check1)
+    top = models.offtopThree(pcent)
 
     # offNums=[('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0)]
 
-    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = linkitylst, chart = '/static/scoreDist.png', name = Player.name, lead = lgleader)
+    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = iconlst, chart = '/static/scoreDist.png', name = Player.name, lead = lgleader)
 
 @app.route('/<some_player>/defense')
 def def_indy(some_player):
@@ -74,7 +83,27 @@ def def_indy(some_player):
     for x in goodStats:
         if x[2] in defDex:
             defNums.append((x[0], x[1]))
-    return render_template('defensive.html', player=Player, lstGD=defNums)
+    
+    pcent = models.percentile(some_player)
+    #lst of each stat percentile
+    leader = models.leagueLead(pcent)
+    #lst of each stat that is exactly 100th percentile
+    lgleader = []
+    #lst of each offensive league leading stat
+    for x in leader:
+        #get offensive league leading stats
+        if x[0] in defDex:
+            lgleader.append(x)
+
+    iconlst = models.iconSet(pcent, some_player)
+    #list of icons with statistical descriptions
+    
+    models.pieCharter(some_player)
+    models.compOff(some_player)
+
+    top = models.offtopThree(pcent)
+
+    return render_template('defensive.html', player=Player, lstG=defNums, iconset = iconlst, chart = '/static/scoreDist.png', name = Player.name, lead = lgleader)
 
 @app.route('/<some_player>/scoutingreport')
 def scouting_report(some_player):
@@ -82,10 +111,19 @@ def scouting_report(some_player):
     defDex = [28,29,30,31,32,33,34,35,36,37,38,39]
     defNums = []
     goodStats = models.checkerG(some_player, 90.0)
+    pcent = models.percentile(some_player)
+    iconlst = models.iconSet(pcent, some_player)
+    leader = models.leagueLead(pcent)
+    lgleader = []
+    for x in leader:
+        #get offensive league leading stats
+        if x[0] in defDex:
+            lgleader.append(x)
+
     for x in goodStats:
         if x[2] in defDex:
             defNums.append((x[0], x[1]))
-    return render_template('defensive.html', player=Player, lstGD=defNums)
+    return render_template('defensive.html', player=Player, lstGD=defNums, iconset = iconlst, chart = '/static/scoreDist.png', name = Player.name, lead = lgleader)
 
 
 @app.route('/allteams/<some_team>')
@@ -105,4 +143,6 @@ def search_page(searched_player):
     .filter(models.Player.name.ilike(searched_player)).all()
     
     return render_template('search.html', players = aplayers)
+
+
 
