@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
 
+# def makePlt(name):
+#     plt.compOff(name)
+
 
 class Player(db.Model):
     __tablename__ = 'players'
@@ -454,13 +457,15 @@ for x,y in dic.items():
 
 # print("what we got", stats.percentileofscore(stat_list[28][1], 9))
 # print("what old got", stats.percentileofscore(testlist, 9))
-
 def percentile(playerName):
     ans = []
     for i in range(df.shape[0]):
+        # print("stat: ", df.loc[i,playerName])
         num = round(stats.percentileofscore((stat_list[i][1]), df.loc[i,playerName]), 2)
+        # print("perc: ", num)
         ans.append(num)
     return ans
+# print(percentile("James Harden"))
 
 def checkerG(name, good):
     index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 40: "fgDiffPer", 41: "touches", 42: "fcTouch", 43: "timeOfpos", 44: "avgSecTouch", 45: "ppTouch", 46: "elbowTouch", 47: "postUps", 48: "paintTouch", 49: "ppElb", 50: "ppPost", 51: "ppPaint", 52: "drives", 53: "dFGA", 54: "dFGper", 55: "dpts", 56: "dPassPer", 57: "dAstPer", 58: "dTovPer", 59: "dFoulPer"}
@@ -471,6 +476,8 @@ def checkerG(name, good):
             if check1[x] > good:
                 lstG.append((check1[x], index[x], x))
     return lstG
+
+# print(checkerG("James Harden", 90))
 
 def checkerB(name, bad):
     index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 40: "fgDiffPer", 41: "touches", 42: "fcTouch", 43: "timeOfpos", 44: "avgSecTouch", 45: "ppTouch", 46: "elbowTouch", 47: "postUps", 48: "paintTouch", 49: "ppElb", 50: "ppPost", 51: "ppPaint", 52: "drives", 53: "dFGA", 54: "dFGper", 55: "dpts", 56: "dPassPer", 57: "dAstPer", 58: "dTovPer", 59: "dFoulPer"}
@@ -521,7 +528,10 @@ def iconSet(checkerG, player):
     if checkerG[1] > 85:
         linkitylist.append((stateFarm, "Distributor", "Assists per game: " + str(df.loc[1,player])))
     return linkitylist
-# print(iconSet(percentile("Jayson Tatum")))
+# p = percentile("James Harden")
+# print(p)
+
+# print(iconSet(p, "James Harden"))
 
 def pieCharter(some_player):
     plt.close('all')
@@ -539,7 +549,8 @@ def pieCharter(some_player):
     plt.close()
     return None
 
-def offtopThree(percentiles):
+def offtopThree(player):
+    percentiles = percentile("James Harden")
     offDex = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59]
     first=0
     firstdex=0
@@ -567,7 +578,12 @@ def offtopThree(percentiles):
     lst.append((thirddex, third))
     return lst
 
-dfScale = df.T
+# print(offtopThree("James Harden"))
+dfScale = df.transpose(copy=True)
+p = percentile("James Harden")
+# print(p)
+
+# print(iconSet(p, "James Harden"))
 scalar = MinMaxScaler()
 dfScale[[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,28,29,30,31,32,33,34,35,36,37,38,40]] = scalar.fit_transform(dfScale[[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,28,29,30,31,32,33,34,35,36,37,38,40]])
 rowLabels = dfScale.index.values
@@ -583,7 +599,6 @@ for col in dfScale2.columns:
 rowLabels2 = dfScale2.index.values
 
 # dfScale2[[0,1,2,3,5,6,7,8,9,11,12,13,14,15,16,17]] = scalar.fit_transform(dfScale2[[0,1,2,3,5,6,7,8,9,11,12,13,14,15,16,17]])
-
 def euc(lst1, lst2):
     sum = 0
     for x in range(len(lst1)):
@@ -640,14 +655,51 @@ def kNearPhys(player, k):
 def kNearPlayStyle(player, k):
     None
 
+diction = setDic()
+dfTran = pd.DataFrame(data=diction)
+dfdf = dfTran.T 
+df2 = dfdf[[4, 14, 19, 21, 23, 25, 27]].copy()
+df3 = df2.T
 
+
+def compOff(player):
+    my_range=(range(1,len(df3.index)+1))
+    comps = kNearPhys(player, 20)[0]
+
+
+    labels = ["fgper", "THptper", "drPer", "casPer", "pullPer", "postPer", "elbPer"]
+
+    compsDF = df2.loc[comps, :]
+    med = compsDF.median(axis=0)
+
+    plt.hlines(y=my_range, xmin=df3[player], xmax=med, color='grey', alpha=0.4)
+    plt.scatter(df3[player], my_range, color='skyblue', alpha=1, label=player)
+    plt.scatter(med, my_range, color='green', alpha=0.4 , label='Comps')
+    plt.legend()
+    plt.yticks(my_range, labels)
+    plt.title("Comparison of the value 1 and the value 2", loc='left')
+    plt.xlabel('Value of the variables')
+    plt.ylabel('Group')
+
+    strFile = "/Users/daniellanda/Desktop/NBA_316/nbastats/static/offComps_" + player + ".svg"
+    plt.savefig(strFile)
+    plt.close()
+    return None
+
+# print(some_player_page("James Harden"))
+
+
+
+# per = checkerG("James Harden", 90)
+# print(per)
+# print(iconSet(per, "James Harden"))
 # print(kNearPhys("JJ Redick", 3))
 
 # print(dfScale.loc[['James Harden']])
 # B = pd.Series(dfScale.loc[['LeBron James']])
-xx = dfScale.loc[['LeBron James']]
-y = dfScale.loc[['James Harden']]
-dude = dfScale.loc["Tacko Fall"].values.tolist()
+# xx = dfScale.loc[['LeBron James']]
+# y = dfScale.loc[['James Harden']]
+# dude = dfScale.loc["Tacko Fall"].values.tolist()
 # dude1 = dfScale.loc["LeBron James"].values.tolist()
 # print(euc(dude,dude1))
 # dude = dfScale.loc["Russell Westbrook"].values.tolist()

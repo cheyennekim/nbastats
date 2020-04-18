@@ -210,7 +210,18 @@
  <div class="header">
   <h1>{{player.name}}</h1>
 </div>
+<div class = "container1">
+  {% for k in iconset %}
+  <div class = "icon" style="width:100px;height:100px">
+    <img src=static/{{k[0]}} class="iconimage" style="width:100px;height:100px;border-radius: 50%;background: #5B7994; width: 100; box-shadow: 0 9px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); text-align: center;">
+    <div id="nums">{{k[2]}}</div>
 
+    <div class="overlay">
+      <div class="text">{{k[1]}}</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 <div class="sec1">
   <ul class="offdef-nav">
     <li><a href = "{{url_for('some_player_page', some_player=player.name)}}">Offensive</a></li>
