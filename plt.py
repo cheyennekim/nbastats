@@ -41,7 +41,7 @@ def pltPerc(player):
 
 # print(med)
 # # print(df3.head())
-# print(pltPerc("JJ Redick"))
+print(pltPerc("JJ Redick"))
 comps = models.kNearPhys("JJ Redick", 20)[0]
 
 compsDF = df2.loc[comps, :]
