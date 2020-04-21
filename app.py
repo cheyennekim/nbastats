@@ -71,7 +71,7 @@ def some_player_page(some_player):
 
     # offNums=[('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0)]
 
-    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = iconlst, chart = '/static/scoreDist.png', name = Player.name, lead = lgleader)
+    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = iconlst, name = Player.name, lead = lgleader)
 
 @app.route('/<some_player>/defense')
 def def_indy(some_player):
@@ -95,7 +95,7 @@ def def_indy(some_player):
         if x[0] in defDex:
             lgleader.append(x)
 
-    iconlst = models.iconSet(pcent, some_player)
+    iconlst = models.iconSetD(pcent, some_player)
     #list of icons with statistical descriptions
     
     models.pieCharter(some_player)
@@ -103,7 +103,7 @@ def def_indy(some_player):
 
     top = models.offtopThree(pcent)
 
-    return render_template('defensive.html', player=Player, lstG=defNums, iconset = iconlst, chart = '/static/scoreDist.png', name = Player.name, lead = lgleader)
+    return render_template('defensive.html', player=Player, lstG=defNums, iconset = iconlst, name = Player.name, lead = lgleader)
 
 @app.route('/<some_player>/scoutingreport')
 def scouting_report(some_player):

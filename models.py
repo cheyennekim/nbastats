@@ -161,6 +161,16 @@ class mesC(db.Model):
     height = db.Column('height', db.String(80))
     weight = db.Column('weight', db.Float)
 
+class salary(db.Model):
+    __tablename__ = 'salaries'
+    __table_args__ = {'extend_existing': True}
+    name = db.Column('Player', db.String(20), db.ForeignKey('player'), primary_key=True)
+    rank = db.Column('Rank', db.Float)
+    nineteen = db.Column('Nineteen', db.Float)
+    twenty = db.Column('Twenty', db.Float)
+    twentyOne = db.Column('TwentyOne', db.Float)
+    twentyTwo = db.Column('TwentyTwo')
+
     
 def games(playername):
     __table_args__ = {'extend_existing': True}
@@ -440,10 +450,6 @@ def setPhysdic():
 
     return dict
 dict2 = setPhysdic()
-for x,y in dict2.items():
-    if len(y) != 17:
-        print(x)
-        print(y)
 dfPhys = pd.DataFrame(data=dict2)
 l = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 for x,y in dic.items():
@@ -453,7 +459,16 @@ for x,y in dic.items():
                 l[k] += 1
 # print(l)
 
+def setSalDic():
+    dict = {}
+    sal = salary.query.all()
+    for p in sal:
+        dict[p.name] = [p.rank, p.nineteen, p.twenty, p.twentyOne, p.twentyTwo]
+    return dict
 
+dict3 = setSalDic()
+dfSal = pd.DataFrame(data=dict3)
+#player names are columns, years salaries are rows
 
 # print("what we got", stats.percentileofscore(stat_list[28][1], 9))
 # print("what old got", stats.percentileofscore(testlist, 9))
@@ -528,6 +543,26 @@ def iconSet(checkerG, player):
     if checkerG[1] > 85:
         linkitylist.append((stateFarm, "Distributor", "Assists per game: " + str(df.loc[1,player])))
     return linkitylist
+
+def iconSetD(perc, player):
+    rebound = "rebound.png"
+    steal = "stolen.png"
+    block = "block.png"
+    layup = "layup.png"
+    defense = "defense.png"
+
+    lst = []
+    if perc[28] > 80:
+        lst.append((rebound, "Crashes the Boards", "Defensive Rebounds per game: " + str(df.loc[28,player])))
+    if perc[30] > 80:
+        lst.append((steal, "Pesky Defender", "Steals per game: " + str(df.loc[30,player])))
+    if perc[31] > 80:
+        lst.append((block, "Shot Blocker", "Blocks per game: " + str(df.loc[31,player])))
+    if perc[34] > 80:
+        lst.append((layup, "Paint Liability", "Opponent Points in Paint per game: " + str(df.loc[34,player])))
+    if perc[40] > 80:
+        lst.append((defense, "Shot Contestor", "Opponent Difference in FG%: " + str(df.loc[40,player]) + "%"))
+    return lst
 # p = percentile("James Harden")
 # print(p)
 
@@ -608,49 +643,28 @@ def euc(lst1, lst2):
     return math.sqrt(sum)
 
 def kNearProduction(player, k):
-    dude = dfScale.loc[player].values.tolist()
-    closest = {}
-    closestNames = []
-    minu = 100
-    ans = []
-    similarity = []
+    dfProd = dfScale[[0,1,2,3,4,5,28,29,30,31,32,33,34,40,45]].copy()
+    dude = dfProd.loc[player].values.tolist()
+    nameDiffs = []
     for x in rowLabels:
         if x != player:
-            comp = dfScale.loc[x].values.tolist()
+            comp = dfProd.loc[x].values.tolist()
             dist = euc(dude, comp)
-            if dist < minu:
-                minu = dist
-                closest[x] = dist
-                closestNames.append(x)
-    kclosest = closestNames[-1*k:]
-    for k in kclosest:
-        similarity.append(closest[k])
-    ans.append(kclosest)
-    ans.append(similarity)
-    return ans
+            nameDiffs.append((x, dist))
+    sort = sorted(nameDiffs, key = lambda x: x[1])
+    return sort[:k]
 
 def kNearPhys(player, k):
     df3 = dfScale2[[0, 1, 2, 4]].copy()
     dude = df3.loc[player].values.tolist()
-    closest = {}
-    closestNames = []
-    minu = 100
-    ans = []
-    similarity = []
+    nameDiffs = []
     for x in rowLabels2:
         if x != player:
             comp = df3.loc[x].values.tolist()
             dist = euc(dude, comp)
-            if dist < minu:
-                minu = dist
-                closest[x] = dist
-                closestNames.append(x)
-    kclosest = closestNames[-1*k:]
-    for k in kclosest:
-        similarity.append(closest[k])
-    ans.append(kclosest)
-    ans.append(similarity)
-    return ans
+            nameDiffs.append((x, dist))
+    sort = sorted(nameDiffs, key = lambda x: x[1])
+    return sort[:k]
 
 def kNearPlayStyle(player, k):
     None
@@ -664,7 +678,10 @@ df3 = df2.T
 
 def compOff(player):
     my_range=(range(1,len(df3.index)+1))
-    comps = kNearPhys(player, 20)[0]
+    compsA = kNearPhys(player, 20)
+    comps = []
+    for x in compsA:
+        comps.append(x[0])
 
 
     labels = ["fgper", "THptper", "drPer", "casPer", "pullPer", "postPer", "elbPer"]
@@ -686,10 +703,16 @@ def compOff(player):
     plt.close()
     return None
 
+
+def kNearSalary(player, k):
+    knear = kNearProduction(player, k)
+    nums = []
+    for x in knear:
+        lst = dfSal[x[0]].tolist()
+        nums.append(lst[1])
+    return mean(nums)
+
 # print(some_player_page("James Harden"))
-
-
-
 # per = checkerG("James Harden", 90)
 # print(per)
 # print(iconSet(per, "James Harden"))
@@ -721,6 +744,4 @@ def compOff(player):
 #     print(col)
 # df1 = pd.concat(df[', axis=1, keys=headers)
 # df.plot.hist(alpha=0.5);
-
-# Player = PlayerOff.query.filter_by(name="Patrick Beverley").first()    
-
+print((kNearSalary("James Harden", 2)) - (dfSal['James Harden'].tolist()[1]))

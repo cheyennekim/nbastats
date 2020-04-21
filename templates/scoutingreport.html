@@ -3,7 +3,7 @@
 <header>
 
 
-	<title>{{player.name}}</title>
+  <title>{{player.name}}</title>
 
 </header>
 <style type="text/css">
@@ -17,18 +17,85 @@
 
   .container {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
     grid-gap: 10px;
     padding: 10px;
+    margin-bottom: 80px;
+  }
+  .container1 {
+    overflow: visible;
+    padding: 10px;
+    margin-bottom: 30px;
   }
 
-  .key-stats {
+  .container2 {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+  }
+
+  .container1 img {
+    vertical-align: middle;
+  }
+
+  .key-stats-container {
     height:300px;
     width:auto;
     overflow:auto;
     overflow-x:hidden;
     grid-column-start: 1;
     grid-column-end: 2;
+  }
+
+  .key-table {
+
+    height:300px;
+    width:200px;
+    border-collapse: collapse;
+    white-space: pre;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    font-size: 1.1em;
+    text-align: center;
+    border: 2px solid black;
+
+  }
+
+  .key-table td:hover { /* th:hover also if you wish */
+    background: lightgrey;
+  }
+  table.key-table tbody tr:hover {
+    background: lightgrey;
+  }
+
+  .key-table tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit
+    text-align: center;
+  }
+
+  .key-table th,
+  .key-table td {
+    padding: 15px 10px;
+  }
+
+  .key-table td {
+    border: 2px solid lightgrey;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .key-table thead tr {
+    text-align: left;
+    font-weight: bold;
+    color: black;
+    background-color: darkorange;
+  }
+
+  .key-table tbody tr:last-of-type {
+    border-bottom: 2px solid darkorange;    
   }
 
   .summary {
@@ -40,25 +107,10 @@
     grid-column-end: 5;
   }
 
-  .key-table {
-    grid-column-start: 2
-    grid-column-end: 4;
-    height:300px;
-    width:200px;
-  }
-
-  .key-table thead tr {
-    background-color: darkorange;
-    color: black;
-    text-align: left;
-    font-weight: bold;
-  }
-
 
 
   .player-table {
-    grid-column-start: 2;
-    grid-column-end: 4;
+
     border-collapse: collapse;
     margin-left: auto;
     margin-right: auto;
@@ -100,6 +152,7 @@
     overflow: hidden;
     background-color: #333;
     position: -webkit-sticky;
+    z-index: 1;
     position: sticky;
     top: 0;
     border-radius: 5px 5px 5px 5px;
@@ -169,6 +222,14 @@
     margin-right: -4px;
   }
 
+  .leaderlist ul {
+    list-style: none;
+    background-color: #444;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+  }
+
   a {
     height: 70px;
   }
@@ -194,14 +255,75 @@
     display: flex<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>;
   }
 
+  .image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .icon {
+    position: relative;
+    width: 100%;
+    display:inline-block;
+    border-radius: 50%
+  }
+
+  .icon:hover .overlay {
+    opacity: 1;
+  }
+
+  .icon:hover #nums {
+    display: block;
+  }
+
+  .icon #nums {
+   display: none;
+   position: absolute;
+   width: auto;
+   height: auto;
+   padding: 5px;
+   border: 1px solid blue;  
+   background-color: lightblue; 
+
+ }
+
+ .overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #008CBA;
+  border-radius: 50%
+}
+
+.scoreDist {
+
+}
 
 </style>
 
 
 
 <body>
-	<ul class="navigation">
-		<li><a class="navbar-brand" href="/"><img src="https://i.imgur.com/FiAyjEj.png" width="100" height="40" class="d-inline-block align-top" alt=""></a></li>
+  <ul class="navigation">
+    <li><a class="navbar-brand" href="/"><img src="https://i.imgur.com/FiAyjEj.png" width="100" height="40" class="d-inline-block align-top" alt=""></a></li>
    <li><a class = "master" href= "{{url_for('all_players')}}">NBA Stats Home</a></li>
    <li><a href = "{{url_for('allteams_page')}}">Teams</a></li>
    <li><a href = "{{url_for('allplayer_page')}}">Players</a></li>
@@ -210,6 +332,15 @@
  <div class="header">
   <h1>{{player.name}}</h1>
 </div>
+
+<div class="sec1">
+  <ul class="offdef-nav">
+    <li><a href = "{{url_for('some_player_page', some_player=player.name)}}">Offensive</a></li>
+    <li><a href = "{{url_for('def_indy', some_player=player.name)}}">Defensive</a></li>
+    <li><a href = "{{url_for('scouting_report', some_player=player.name)}}">Scouting Report</a></li>
+  </ul>
+</div>
+
 <div class = "container1">
   {% for k in iconset %}
   <div class = "icon" style="width:100px;height:100px">
@@ -222,16 +353,63 @@
   </div>
   {% endfor %}
 </div>
-<div class="sec1">
-  <ul class="offdef-nav">
-    <li><a href = "{{url_for('some_player_page', some_player=player.name)}}">Offensive</a></li>
-    <li><a href = "{{url_for('def_indy', some_player=player.name)}}">Defensive</a></li>
-    <li><a href = "#scoutingreport">Scouting Report</a></li>
-  </ul>
+<div class = "container">
+  <div class = "key-stats-container">
+    <h1 style = "text-align: center"> Key Numbers </h1>
+    <table class = "key-table" style = "width:70%">
+      <thead>
+        <tr>
+          <th> Stat </th>
+          <th> NBA Percentile </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> 
+          {% for x in lstG %}
+          <tr>
+           <th> {{x[1]}} </th>
+           <td> {{x[0]}} </td>
+           {% endfor %}
+         </tr>
+       </tbody>
+
+     </table>
+   </div>
+
+   <div class = "summary">
+    <h1 style = "text-align: center"> Summary </h1>
+    <table class = "player-table" style = "width:70%">
+      <thead>
+        <tr> 
+          <th> Min </th>
+          <th> PPG </th>
+          <th> APG </th>
+          <th> FG% </th>
+          <th> 3FG% </th>
+          <th> Orpg </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td> {{player.minutes}} </td>
+          <td> {{player.ppg}} </td>
+          <td> {{player.apg}} </td>
+          <td> {{player.fgper}} </td>
+          <td> {{player.THptper}} </td>
+          <td> {{player.orpg}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class = 'container2' float: right;>
+  <h1 style = "text-align: center; float: left;"> Scoring Distribution </h1>
+  <img src="static/iscoreDist_{{name}}.svg" style= "width: 480px; height: 400px; border: 2px solid black; grid-column-start: 1; grid-column-end: 3; object-fit: cover;">
+  <h1 style = "text-align: center; float: right;"> Scoring Distribution </h1>
+  <img src="static/offComps_{{name}}.svg" style= "width: 480px; height: 400px; border: 2px solid black; grid-column-start: 3; grid-column-end: 5; object-fit: cover;">
 </div>
 
 
-<h1> <{{player.name}} scouting report here> </h1>
 
 </body>
 
