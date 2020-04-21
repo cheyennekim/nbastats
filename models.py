@@ -744,4 +744,12 @@ def kNearSalary(player, k):
 #     print(col)
 # df1 = pd.concat(df[', axis=1, keys=headers)
 # df.plot.hist(alpha=0.5);
-print((kNearSalary("James Harden", 2)) - (dfSal['James Harden'].tolist()[1]))
+# pro = (kNearProduction("James Harden", 10))
+# ls = []
+# for x in pro:
+#     ls.append(x[0])
+#     ls.append(dfSal[x[0]].tolist()[1])
+# print(ls)
+
+
+

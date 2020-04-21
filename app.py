@@ -108,22 +108,17 @@ def def_indy(some_player):
 @app.route('/<some_player>/scoutingreport')
 def scouting_report(some_player):
     Player = models.PlayerOff.query.filter_by(name=some_player).first()
-    defDex = [28,29,30,31,32,33,34,35,36,37,38,39]
-    defNums = []
-    goodStats = models.checkerG(some_player, 90.0)
-    pcent = models.percentile(some_player)
-    iconlst = models.iconSet(pcent, some_player)
-    leader = models.leagueLead(pcent)
-    lgleader = []
-    for x in leader:
-        #get offensive league leading stats
-        if x[0] in defDex:
-            lgleader.append(x)
+    playSal = models.salary.query.filter_by(name=some_player).first()
 
-    for x in goodStats:
-        if x[2] in defDex:
-            defNums.append((x[0], x[1]))
-    return render_template('defensive.html', player=Player, lstGD=defNums, iconset = iconlst, chart = '/static/scoreDist.png', name = Player.name, lead = lgleader)
+    LandaSalary = models.kNearSalary(some_player, 2)
+
+    LandaSalary = "{:,}".format(round(LandaSalary))
+    salary = playSal.nineteen
+    salary = "{:,}".format(round(salary))
+
+
+    
+    return render_template('scoutingreport.html', player=Player, LandaSal = LandaSalary, sal = salary, name = Player.name)
 
 
 @app.route('/allteams/<some_team>')
