@@ -457,7 +457,6 @@ for x,y in dic.items():
         for k in range(17):
             if dict2[x][k] != None and dict2[x][k] != 0:
                 l[k] += 1
-# print(l)
 
 def setSalDic():
     dict = {}
