@@ -1,8 +1,8 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from livereload import Server
 from forms import SearchForm
-
+import os
 
 app = Flask(__name__)
 app.secret_key = 's3cr3t'
@@ -13,7 +13,10 @@ db = SQLAlchemy(app, session_options={'autocommit': False})
 app.debug = True
 
 import models
-
+@app.route('/favicon.ico')
+def favicon():
+	return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+	
 @app.route('/', methods=['GET', 'POST'])
 def all_players():
     players = models.Player.query.all()
