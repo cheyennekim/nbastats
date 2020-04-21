@@ -7,6 +7,8 @@ from statistics import mean, median
 from scipy import stats
 import difflib
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
@@ -452,11 +454,11 @@ def setPhysdic():
 dict2 = setPhysdic()
 dfPhys = pd.DataFrame(data=dict2)
 l = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-for x,y in dic.items():
-    if x != '\ufeffBobby Portis':
-        for k in range(17):
-            if dict2[x][k] != None and dict2[x][k] != 0:
-                l[k] += 1
+# for x,y in dic.items():
+#     if x != '\ufeffBobby Portis':
+#         for k in range(17):
+#             if dict2[x][k] != None and dict2[x][k] != 0:
+#                 l[k] += 1
 # print(l)
 
 def setSalDic():
@@ -579,7 +581,7 @@ def pieCharter(some_player):
     plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
     plt.axis('equal')
     # plt.savefig('/Users/daniellanda/Desktop/NBA_316/nbastats/templates/' + some_player + 'scoreDist.svg')
-    strFile = "/Users/daniellanda/Desktop/NBA_316/nbastats/static/iscoreDist_" + Player.name + ".svg"
+    strFile = "static/iscoreDist_" + Player.name + ".svg"
     plt.savefig(strFile)
     plt.close()
     return None
@@ -698,7 +700,7 @@ def compOff(player):
     plt.xlabel('Value of the variables')
     plt.ylabel('Group')
 
-    strFile = "/Users/daniellanda/Desktop/NBA_316/nbastats/static/offComps_" + player + ".svg"
+    strFile = "static/offComps_" + player + ".svg"
     plt.savefig(strFile)
     plt.close()
     return None
