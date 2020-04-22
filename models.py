@@ -518,6 +518,8 @@ def iconSet(checkerG, player):
     workhorse = "shield.png"
     TO = "warning.svg"
     stateFarm = "assist.svg"
+    pt = "paingbrush.png"
+    post = "post.png"
     
 
     linkitylist=[]
@@ -539,6 +541,10 @@ def iconSet(checkerG, player):
         linkitylist.append((TO, "Turnover Hazard", "Turnovers per game: " + str(df.loc[2,player])))
     if checkerG[1] > 85:
         linkitylist.append((stateFarm, "Distributor", "Assists per game: " + str(df.loc[1,player])))
+    if checkerG[51] or checkerG[11] > 85:
+        linkitylist.append((pt, "Paint Scorer", "Points per paint touch: " + str(df.loc[51,player])))
+    if checkerG[24] > 85 or checkerG[47] > 85:
+        linkitylist.append((post, "Post Scorer", "Post points per game: " + str(df.loc[24,player])))
     return linkitylist
 
 def iconSetD(perc, player):
@@ -608,6 +614,75 @@ def offtopThree(player):
     lst.append((firstdex, first))
     lst.append((seconddex, second))
     lst.append((thirddex, third))
+    return lst
+
+def offPS(some_player):
+    perc = percentile(some_player)
+    lst = []
+    if perc[8] > 85.0 and perc[16] > 85.0:
+        lst.append("Efficient Perimeter Threat")
+    elif perc[8] > 90.0:
+        lst.append("Does most of his damage beyond the arc")
+
+
+    if perc[9] > 90.0:
+        lst.append("Likes to get out and run in transition")
+    if perc[12] > 90.0:
+        lst.append("Iso-Heavy")
+    if perc[12] < 10.0:
+        lst.append("Off-ball threat who scores off assists")
+    if perc[10] > 90.0:
+        lst.append("Get's to the line")
+
+    if perc[11] > 90.0 and perc[7] > 90.0 and perc[26] > 90.0: 
+        lst.append("Does most of his damage in the mid-range, at the elbow, and in the paint")
+    elif perc[7] > 90.0 and perc[11] > 90.0:
+        lst.append("Does most of his damage in the mid-range and in the paint")
+    elif perc[26] > 90.0 and perc[11] > 90.0:
+        lst.append("Does most of his damage at the elbow and in the paint")
+    elif perc[26] > 90.0 and perc[7] > 90.0:
+        lst.append("Does most of his damage in the mid-range and at the elbow")
+    elif perc[26] > 90.0:
+        lst.append("Does most of his damage at the elbow")
+    elif perc[7] > 90.0:
+        lst.append("Does most of his damage in the mid-range")
+    elif perc[11] > 90.0:
+        lst.append("Does most of his damage in the paint")
+
+    if perc[44] > 90.0:
+        lst.append("Likes to hold the ball")
+    if perc[43] > 90.0:
+        lst.append("Offense runs through him")
+
+    if perc[52] > 90.0 and perc[56] > 90.0 and perc[55] > 90.0:
+        lst.append("Attacks the basket --> can both finish and find teammates on the drive")  
+    elif perc[52] > 90.0 and perc[56] > 90.0:
+        lst.append("Likes to attack the basket --> pass-heavy on the drive")
+    elif perc[52] > 90.0 and perc[55] > 90.0:
+        lst.append("Likes to attack the basket --> shot-heavy on the drive")
+    elif perc[52] > 90.0:
+        lst.append("Likes to attack the basket")
+
+
+    if perc[47] > 90.0 or perc[24] > 90.0:
+        lst.append("Threat in the post")
+    elif perc[46] > 90.0:
+        lst.append("His game is revolves around the elbow")
+
+
+    if perc[20] > 90.0 and perc[22] > 90.0:
+        lst.append("Can score via catch & shoot or pull-up")
+    elif perc[20] > 90.0:
+        lst.append("Catch & shoot scorer")
+    elif perc[22] > 90.0:
+        lst.append("Pull-up scorer")
+
+
+    if perc[1] > 90.0:
+        lst.append("Finds teammates")
+
+
+
     return lst
 
 # print(offtopThree("James Harden"))

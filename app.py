@@ -118,10 +118,11 @@ def scouting_report(some_player):
     LandaSalary = "{:,}".format(round(LandaSalary))
     salary = playSal.nineteen
     salary = "{:,}".format(round(salary))
+    offPS = models.offPS(some_player)
 
 
     
-    return render_template('scoutingreport.html', player=Player, LandaSal = LandaSalary, sal = salary, name = Player.name)
+    return render_template('scoutingreport.html', player=Player, LandaSal = LandaSalary, sal = salary, name = Player.name, ops = offPS)
 
 
 @app.route('/allteams/<some_team>')
