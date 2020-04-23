@@ -69,6 +69,7 @@ def some_player_page(some_player):
     
     models.pieCharter(some_player)
     models.compOff(some_player)
+    models.compOff2(some_player)
 
     top = models.offtopThree(pcent)
 
@@ -103,6 +104,7 @@ def def_indy(some_player):
     
     models.pieCharter(some_player)
     models.compOff(some_player)
+    models.compOff2(some_player)
 
     top = models.offtopThree(pcent)
 
