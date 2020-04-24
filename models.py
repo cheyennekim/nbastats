@@ -751,7 +751,7 @@ dfdf2 = dfTran2.T
 df2 = dfdf[[19, 23, 21]].copy()
 df3 = df2.T
 
-df4 = dfdf2[[29, 27, 14]].copy()
+df4 = dfdf2[[14, 27, 4]].copy()
 df5 = df4.T
 
 
@@ -803,12 +803,12 @@ def compOff(player):
     compsDF = df2.loc[comps, :]
     med = compsDF.median(axis=0)
     med = med.values.tolist()
-
-    queryVals = df3["James Harden"].values.tolist()
+    queryVals = df3[player].values.tolist()
+    print(queryVals)
 
     fig.add_trace(go.Indicator(
-        mode = "number+gauge+delta", value = queryVals[2],
-        delta = {'reference': med[2]},
+        mode = "number+gauge+delta", value = queryVals[0],
+        delta = {'reference': med[0]},
         domain = {'x': [0.3, 1], 'y': [0.1, 0.3]},
         title = {'text': "Driving Shot %"},
         gauge = {
@@ -817,7 +817,7 @@ def compOff(player):
             'threshold': {
                 'line': {'color': "blue", 'width': 5},
                 'thickness': 0.75,
-                'value': med[2]},
+                'value': med[0]},
             'steps': [
                 {'range': [0, 20], 'color': "#FFDD00"},
                 {'range': [20, 40], 'color': "#FFB300"},
@@ -847,8 +847,8 @@ def compOff(player):
             'bar': {'color': "black"}}))
 
     fig.add_trace(go.Indicator(
-        mode = "number+gauge+delta", value = queryVals[0],
-        delta = {'reference': med[0]},
+        mode = "number+gauge+delta", value = queryVals[2],
+        delta = {'reference': med[2]},
         domain = {'x': [0.3, 1], 'y': [0.7, 0.9]},
         title = {'text': "Catch & Shoot %"},
         gauge = {
@@ -857,7 +857,7 @@ def compOff(player):
             'threshold': {
                 'line': {'color': "blue", 'width': 5},
                 'thickness': 0.75,
-                'value': med[0]},
+                'value': med[2]},
             'steps': [
                 {'range': [0, 20], 'color': "#FFDD00"},
                 {'range': [20, 40], 'color': "#FFB300"},
@@ -887,15 +887,14 @@ def compOff2(player):
     med = compsDF.median(axis=0)
     med = med.values.tolist()
 
-    print(df5["James Harden"])
 
-    queryVals = df5["James Harden"].values.tolist()
+    queryVals = df5[player].values.tolist()
 
     fig.add_trace(go.Indicator(
         mode = "number+gauge+delta", value = queryVals[2],
         delta = {'reference': med[2]},
         domain = {'x': [0.3, 1], 'y': [0.1, 0.3]},
-        title = {'text': "Driving Shot %"},
+        title = {'text': "Field Goal %"},
         gauge = {
             'shape': "bullet",
             'axis': {'range': [None, 100]},
@@ -915,7 +914,7 @@ def compOff2(player):
         mode = "number+gauge+delta", value = queryVals[1],
         delta = {'reference': med[1]},
         domain = {'x': [0.3, 1], 'y': [0.4, 0.6]},
-        title = {'text': "Pull-up %"},
+        title = {'text': "Elbow Shot %"},
         gauge = {
             'shape': "bullet",
             'axis': {'range': [None, 100]},
@@ -935,7 +934,7 @@ def compOff2(player):
         mode = "number+gauge+delta", value = queryVals[0],
         delta = {'reference': med[0]},
         domain = {'x': [0.3, 1], 'y': [0.7, 0.9]},
-        title = {'text': "Catch & Shoot %"},
+        title = {'text': "3pt %"},
         gauge = {
             'shape': "bullet",
             'axis': {'range': [None, 100]},
@@ -998,6 +997,10 @@ def kNearSalary(player, k):
 # print(dfScale.idxmax())
 # data = stat_list[15][1]
 # plt.hist(data, bins='auto')
+print(dic["Joe Ingles"][14])
+print(dic["Joe Ingles"][27])
+print(dic["Joe Ingles"][4])
+print(percentile("Justin Holiday")[4])
 
 # plt.show()
 # for player, numbers in df.iteritems():
