@@ -12,6 +12,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
+import plotly.graph_objects as go
+
 
 # def makePlt(name):
 #     plt.compOff(name)
@@ -743,39 +745,226 @@ def kNearPlayStyle(player, k):
 
 diction = setDic()
 dfTran = pd.DataFrame(data=diction)
+dfTran2 = pd.DataFrame(data=diction)
 dfdf = dfTran.T 
-df2 = dfdf[[4, 14, 19, 21, 23, 25, 27]].copy()
+dfdf2 = dfTran2.T
+df2 = dfdf[[19, 23, 21]].copy()
 df3 = df2.T
 
+df4 = dfdf2[[14, 27, 4]].copy()
+df5 = df4.T
+
+
+
+# def compOff(player):
+#     my_range=(range(1,len(df3.index)+1))
+#     compsA = kNearPhys(player, 20)
+#     comps = []
+#     for x in compsA:
+#         comps.append(x[0])
+
+
+    # labels = ["fgper", "THptper", "drPer", "casPer", "pullPer", "postPer", "elbPer"]
+
+#     compsDF = df2.loc[comps, :]
+#     med = compsDF.median(axis=0)
+#     med = med.values.tolist()
+
+#     queryVals = df3["James Harden"].values.tolist()
+
+#     myDFList = [['fg %', med[0], 'Comps'], ['3pt %', med[1], 'Comps'], ['Driveshot %', med[2], 'Comps'], ['Catch & Shoot %', med[3], 'Comps'], ['Pull-up %', med[4], 'Comps'], ['Post-up %', med[5], 'Comps'], ['Elbow %', med[6], 'Comps'], ['fg %', queryVals[0], player], ['3pt %', queryVals[1], player], ['Driveshot %', queryVals[2], player], ['Catch & Shoot %', queryVals[3], player], ['Pull-up %', queryVals[4], player], ['Post-up %', queryVals[5], player], ['Elbow %', queryVals[6], player]]
+#     myDF = pd.DataFrame(myDFList, columns=['Stat', 'Percentage', 'Player'])
+
+#     sns.catplot(x='Stat', y='Percentage', hue='Player', data=myDF, kind='bar')
+#     plt.show()
+    # plt.hlines(y=my_range, xmin=df3[player], xmax=med, color='grey', alpha=0.4)
+    # plt.scatter(df3[player], my_range, color='skyblue', alpha=1, label=player)
+    # plt.scatter(med, my_range, color='green', alpha=0.4 , label='Comps')
+    # plt.legend()
+    # plt.yticks(my_range, labels)
+    # plt.title("Comparison of the value 1 and the value 2", loc='left')
+    # plt.xlabel('Value of the variables')
+    # plt.ylabel('Group')
+
+    # strFile = "static/offComps_" + player + ".svg"
+    # plt.savefig(strFile)
+    # plt.show
+    # plt.close()
+    # return None
 
 def compOff(player):
-    my_range=(range(1,len(df3.index)+1))
+    fig = go.Figure()
     compsA = kNearPhys(player, 20)
     comps = []
     for x in compsA:
         comps.append(x[0])
 
 
-    labels = ["fgper", "THptper", "drPer", "casPer", "pullPer", "postPer", "elbPer"]
-
     compsDF = df2.loc[comps, :]
     med = compsDF.median(axis=0)
+    med = med.values.tolist()
+    queryVals = df3[player].values.tolist()
+    print(queryVals)
 
-    plt.hlines(y=my_range, xmin=df3[player], xmax=med, color='grey', alpha=0.4)
-    plt.scatter(df3[player], my_range, color='skyblue', alpha=1, label=player)
-    plt.scatter(med, my_range, color='green', alpha=0.4 , label='Comps')
-    plt.legend()
-    plt.yticks(my_range, labels)
-    plt.title("Comparison of the value 1 and the value 2", loc='left')
-    plt.xlabel('Value of the variables')
-    plt.ylabel('Group')
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[0],
+        delta = {'reference': med[0]},
+        domain = {'x': [0.3, 1], 'y': [0.1, 0.3]},
+        title = {'text': "Driving Shot %"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[0]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[1],
+        delta = {'reference': med[1]},
+        domain = {'x': [0.3, 1], 'y': [0.4, 0.6]},
+        title = {'text': "Pull-up %"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[1]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[2],
+        delta = {'reference': med[2]},
+        domain = {'x': [0.3, 1], 'y': [0.7, 0.9]},
+        title = {'text': "Catch & Shoot %"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[2]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+
+    fig.update_layout(height = 400 , margin = {'t':0, 'b':0, 'l':0})
 
     strFile = "static/offComps_" + player + ".svg"
-    plt.savefig(strFile)
-    plt.close()
+    fig.write_image(strFile)
+    # print(med)
+    # print(queryVals)
     return None
 
+def compOff2(player):
+    fig = go.Figure()
+    compsA = kNearPhys(player, 20)
+    comps = []
+    for x in compsA:
+        comps.append(x[0])
 
+
+    compsDF = df4.loc[comps, :]
+    med = compsDF.median(axis=0)
+    med = med.values.tolist()
+
+
+    queryVals = df5[player].values.tolist()
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[2],
+        delta = {'reference': med[2]},
+        domain = {'x': [0.3, 1], 'y': [0.1, 0.3]},
+        title = {'text': "Field Goal %"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[2]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[1],
+        delta = {'reference': med[1]},
+        domain = {'x': [0.3, 1], 'y': [0.4, 0.6]},
+        title = {'text': "Elbow Shot %"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[1]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[0],
+        delta = {'reference': med[0]},
+        domain = {'x': [0.3, 1], 'y': [0.7, 0.9]},
+        title = {'text': "3pt %"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[0]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+
+    fig.update_layout(height = 400 , margin = {'t':0, 'b':0, 'l':0})
+
+    strFile = "static/offComps2_" + player + ".svg"
+    fig.write_image(strFile)
+    # print(med)
+    # print(queryVals)
+    return None
+
+# p = percentile("James Harden")
+# print(p[4])
+# print(p[27])
+# print(p[24])
+# print(p)
+# compOff2("James Harden")
 def kNearSalary(player, k):
     knear = kNearProduction(player, k)
     nums = []
@@ -808,6 +997,10 @@ def kNearSalary(player, k):
 # print(dfScale.idxmax())
 # data = stat_list[15][1]
 # plt.hist(data, bins='auto')
+print(dic["Joe Ingles"][14])
+print(dic["Joe Ingles"][27])
+print(dic["Joe Ingles"][4])
+print(percentile("Justin Holiday")[4])
 
 # plt.show()
 # for player, numbers in df.iteritems():
@@ -822,6 +1015,7 @@ def kNearSalary(player, k):
 #     ls.append(x[0])
 #     ls.append(dfSal[x[0]].tolist()[1])
 # print(ls)
-
-
+# print(df3["James Harden"])
+# print(df5["James Harden"])
+# print(dic["James Harden"][29])
 
