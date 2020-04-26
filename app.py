@@ -87,7 +87,8 @@ def def_indy(some_player):
     for x in goodStats:
         if x[3] in defDex:
             defNums.append((x[0], x[1], x[2]))
-    
+    models.compDef(some_player)
+    models.compDef2(some_player)
     pcent = models.percentile(some_player)
     #lst of each stat percentile
     leader = models.leagueLead(pcent)
