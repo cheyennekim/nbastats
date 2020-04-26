@@ -28,6 +28,43 @@
 
 
 <style>
+  .player-table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:10px;
+    font-size: 1.1em;
+    min-width: 500px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    /*border-style: ridge;
+    border-width: 150px;
+    border-color: #8ebf42;*/
+  }
+
+  .player-table thead tr {
+    background-color: darkorange;
+    color: black;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .player-table th,
+  .player-table td {
+    padding: 12px 15px;
+  }
+
+  .player-table tbody tr {
+    border-bottom: 1px solid lightgrey;
+  }
+
+  .player-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+  }
+  .player-table tbody tr:last-of-type {
+    border-bottom: 2px solid darkorange;
+  }
 .nav-link{
   color: #484848;
   font-size: 16px;
@@ -83,14 +120,26 @@
 
   <!-- <a class="nav-link js-scroll-trigger" href="{{url_for('all_players')}}">NBA Stats Home</a>
 </li> -->
+<table class ="player-table">
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th>Team</th>
 
-<p> The player you searched: <a href="{{url_for('some_player_page', some_player=player.player)}}">{{player.player}}</a>
+    </tr>
+  </thead>
+  <tbody>
+    {% for player in players %}
+    <tr>
+      <td><a href="{{url_for('some_player_page', some_player=player.player)}}">{{player.player}}</a></td>
+      <td><a href="{{url_for('teams_page', some_team=player.team)}}">{{player.team}}</a></td>
 
-<br />
-    Team:<a href="{{url_for('teams_page', some_team=player.team)}}">{{player.team}}</a>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
-<br />
-</p>
+
 </center>
 
   {% endblock %}

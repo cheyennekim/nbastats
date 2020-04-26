@@ -3,7 +3,7 @@
 <header>
 
 
-	<title>{{player.name}}</title>
+  <title>{{player.name}}</title>
 
 </header>
 <style type="text/css">
@@ -13,186 +13,306 @@
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
-  
-
-  .container {
+  * {
+    font-family: sans-serif; /* Change your font family */
+  }
+  /* The grid container */
+  .grid-container {
     display: grid;
-    grid-template-columns: auto auto auto;
-    grid-gap: 10px;
-    padding: 10px;
-  }
-
-  .key-stats {
-    height:300px;
-    width:auto;
-    overflow:auto;
-    overflow-x:hidden;
-    grid-column-start: 1;
-    grid-column-end: 2;
-  }
-
-  .summary {
-    height:auto;
-    width:auto;
-    overflow:auto;
-    overflow-x:hidden;
-    grid-column-start: 2;
-    grid-column-end: 5;
-  }
-
-  .key-table {
-    grid-column-start: 2
-    grid-column-end: 4;
-    height:300px;
-    width:200px;
-  }
-
-  .key-table thead tr {
-    background-color: darkorange;
-    color: black;
-    text-align: left;
-    font-weight: bold;
-  }
-
-
-
-  .player-table {
-    grid-column-start: 2;
-    grid-column-end: 4;
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top:10px;
-    font-size: 1.1em;
-    min-width: 500px;
-    border-radius: 5px 5px 0 0;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.15);
-  }
-
-  .player-table thead tr {
-    background-color: darkorange;
-    color: black;
-    text-align: left;
-    font-weight: bold;
-  }
-
-  .player-table th,
-  .player-table td {
-    padding: 12px 15px;
-  }
-
-  .player-table, .t tbody tr {
-    border-bottom: 1px solid lightgrey;
-  }
-
-  .player-table, .key-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
-  }
-  .player-table tbody tr:last-of-type {
-    border-bottom: 2px solid darkorange;
-  }
-  
-  .navigation {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    border-radius: 5px 5px 5px 5px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.15);
-  }
-
-  .offdef-nav {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    border-radius: 5px 5px 5px 5px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.15);
-    padding: 10px;
-    margin-left: 80px;
-    margin-right: 80px;
-    margin-bottom: 40px;
-  }
-
-  li {
-    float: left;
-    height: 70px;
-    border-color: black;
-    font-size: larger;
-  }
-  li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 20px 16px;
-    text-decoration: none;
-
-
-  }
-  li a:hover {
-    background-color: #111;
-    color: white;
-
-  }
-  .master {
-    background-color: darkorange;
-    color: black;
-    font-weight: bolder;
-  }
-  .header {
-    text-align: center;
-    border-radius: 5px 5px 0 0;
-    text-shadow: 5px 5px 10px darkorange;
-    margin-bottom: 60px;
-    font-size: xx-large;
-  }
-
-  .offdef-nav ul {
-    list-style: none;
-    background-color: #444;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-  }
-
-  .offdef-nav li {
-    display: inline-block;
-    margin-right: -4px;
-  }
-
-  a {
-    height: 70px;
-  }
-
-  .header img { 
-    width: 100px;
-    height: 100px;
-    background: white;
-    float: left;
+    grid-template-areas: 
+    'topLeft topLeft topLeft topRigh topRigh topRight' 
+    'far midLeft midLeft midRigh midRigh midRight'
+    'left left middle middle right right' 
+    'footer footer footer footer footer footer';
+    /* grid-column-gap: 10px; - if you want gap between the columns */
   } 
 
-  .header h1 {
+  .topRight {
+    grid-area: topRight;
     position: relative;
-    top: 18px;
-    left: 10px;
-  }
 
-  .navbar-brand {
-    background-color: white;
+/*    padding: 30px;
+*/*/ }
 
-  }
-  body {
-    display: flex<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>;
-  }
+.midRight {
+  grid-area: midRight;
+  text-align: center;
+  padding: 30px;
+
+}
+
+.topLeft {
+  grid-area: topLeft;
+  padding: 30px;
+  position: relative;
+  text-align: center;
+/*    font-size: 35px;
+*/  }
+
+.navigation {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: -webkit-sticky;
+  z-index: 1;
+  position: sticky;
+  top: 0;
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+}
+
+.offdef-nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  padding: 10px;
+  margin-left: 80px;
+  margin-right: 80px;
+  margin-bottom: 40px;
+}
+
+.ls {
+  float: left;
+  height: 70px;
+  border-color: black;
+  font-size: larger;
+}
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 20px 16px;
+  text-decoration: none;
+
+
+}
+li a:hover {
+  background-color: #111;
+  color: white;
+
+}
+.master {
+  background-color: darkorange;
+  color: black;
+  font-weight: bolder;
+}
+.header {
+  text-align: center;
+  border-radius: 5px 5px 0 0;
+  text-shadow: 5px 5px 10px darkorange;
+  margin-bottom: 60px;
+  font-size: xx-large;
+}
+
+.offdef-nav ul {
+  list-style: none;
+  background-color: #444;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.offdef-nav li {
+  display: inline-block;
+  margin-right: -4px;
+}
+
+
+a {
+  height: 70px;
+}
+
+.header img { 
+  width: 100px;
+  height: 100px;
+  background: white;
+  float: left;
+} 
+
+.header h1 {
+  position: relative;
+  top: 18px;
+  left: 10px;
+}
+
+.navbar-brand {
+  background-color: white;
+}
+
+.salTable {
+  width: 500px;
+  overflow: hidden;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 1.2em;
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  top: 0;
+  right: 75px;
+}
+
+.but {
+  display: block;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 25px 0;
+  width: 500px;
+  font-size: 1.2em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-radius: 5px 5px 5px 5px;
+  background-color: #009879;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 12px 15px;
+  position: absolute;
+  right: 75px;
+  top: 120px;
+}
+
+.accordion1_button {
+  display: block;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 25px 0;
+  width: 500px;
+  font-size: 1.2em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-radius: 5px 5px 5px 5px;
+  background-color: #009879;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 12px 15px;
+  position: absolute;
+  right: 75px;
+  top: 190px;
+}
+
+.accordion1_button::after{
+  content: '\25be';
+  float: right;
+  transform: scale(1.5);
+}
+
+.accordion1_button--active {background: #555555}
+.accordion1_button--active::after {content: '\25b4'}
+
+.accordion1_content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.2s;
+  position: absolute;
+  top: 270px;
+  right: 75px;
+  width: 470px;
+  padding: 0 15px;
+  background: lightgrey;
+  z-index: 2;
+}
+
+
+.active, .accordion1_button:hover {
+  background-color: #333;
+  transition: 0.5s;
+}
+
+.but::after {
+  content: '\25be';
+  float: right;
+  transform: scale(1.5);
+}
+
+
+
+.but--active { background: #333 }
+.but--active::after { content: '\25b4'; }
+.accordion_content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.2s;
+  position: absolute;
+  top: 200px;
+  right: 75px;
+  width: 470px;
+  padding: 0 15px;
+  background: lightgrey;
+  z-index: 1;
+}
+
+
+
+.active, .but:hover {
+  background-color: #333;
+  transition: 0.5s;
+}
+
+
+
+
+.salTable th {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+.salTable th,
+.salTable td {
+  padding: 12px 15px;
+}
+
+.salTable tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.salTable tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.orep {
+  text-align: left;
+  font-size: 20px;
+  font-family: sans-serif;
+  bottom-padding: 30px
+}
+
+.orep lh {
+  font-weight: bold;
+  font-size: 25px;
+  color: #009879;
+}
+
+.drep {
+  text-align: left;
+  font-size: 20px;
+  font-family: sans-serif;
+
+}
+
+.drep lh {
+  font-weight: bold;
+  font-size: 25px;
+  color: #009879;
+}
+
+
+body {
+  display: flex<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>;
+}
+
 
 
 </style>
@@ -200,27 +320,126 @@
 
 
 <body>
-	<ul class="navigation">
-		<li><a class="navbar-brand" href="/"><img src="https://i.imgur.com/FiAyjEj.png" width="100" height="40" class="d-inline-block align-top" alt=""></a></li>
-   <li><a class = "master" href= "{{url_for('all_players')}}">NBA Stats Home</a></li>
-   <li><a href = "{{url_for('allteams_page')}}">Teams</a></li>
-   <li><a href = "{{url_for('allplayer_page')}}">Players</a></li>
-   <!-- <li><a href = "#page-top">Back To Top</a></li> -->
- </ul>
- <div class="header">
-  <h1>{{player.name}}</h1>
-</div>
-
-<div class="sec1">
-  <ul class="offdef-nav">
-    <li><a href = "{{url_for('some_player_page', some_player=player.name)}}">Offensive</a></li>
-    <li><a href = "{{url_for('def_indy', some_player=player.name)}}">Defensive</a></li>
-    <li><a href = "#scoutingreport">Scouting Report</a></li>
+  <ul class="navigation">
+    <li class = "ls"><a class="navbar-brand" href="/"><img src="https://i.imgur.com/FiAyjEj.png" width="100" height="40" class="d-inline-block align-top" alt=""></a></li>
+    <li class = "ls"><a class = "master" href= "{{url_for('all_players')}}">NBA Stats Home</a></li>
+    <li class = "ls"><a href = "{{url_for('allteams_page')}}">Teams</a></li>
+    <li class = "ls"><a href = "{{url_for('allplayer_page')}}">Players</a></li>
+    <!-- <li><a href = "#page-top">Back To Top</a></li> -->
   </ul>
-</div>
+  <div class="header">
+    <h1>{{player.name}}</h1>
+  </div>
+
+  <div class="sec1">
+    <ul class="offdef-nav">
+      <li class = "ls"><a href = "{{url_for('some_player_page', some_player=player.name)}}">Offensive</a></li>
+      <li class = "ls"><a href = "{{url_for('def_indy', some_player=player.name)}}">Defensive</a></li>
+      <li class = "ls"><a href = "{{url_for('scouting_report', some_player=player.name)}}">Scouting Report</a></li>
+    </ul>
+  </div>
+
+  <div class="grid-container">
+    <div class="topRight">
+      <table class = "salTable" style="float:right">
+        <tr>
+          <th> Salary: </th>
+          <td> ${{sal}} </td>
+        </tr>
+        <tr>
+          <th> Landa's Valuation: </th>
+          <td style = "font-style: bold"> ${{LandaSal}} </td>
+        </tr>
+      </table>
+
+      <div class = "accordion">
+        <button class = "but" style="float:right">
+          What is Landa's Valuation?
+        </button>
+        <div class = "accordion_content">
+          <p> Landa's Valuation uses the KNN machine learning algorithm to project a queried player's salary based on 
+            the salaries of their most similar peers. Similarity is evaluated using the euclidean distance of various normalized datapoints corresponding to different
+          metrics of statistical production on the basketball court.</p>
+        </div>
+      </div>
+
+      <div class="accordion1">
+        <button type="button" class="accordion1_button accordion1__button--active"> Who are {{player.name}}'s comparisons? </button>
+        <div class = "accordion1_content">
+          <p>
+            {% for x in comp %}
+            <li>{{x[0]}} </li>
+            {% endfor %}
+          </p>
+        </div>
+      </div>
+
+      
 
 
-<h1> <{{player.name}} scouting report here> </h1>
+
+      <script type="text/javascript">
+        document.querySelectorAll('.but').forEach(button => {
+          button.addEventListener('click', () => {
+            const accordion_content = button.nextElementSibling
+
+            button.classList.toggle('but--active');
+
+            if (button.classList.contains('but--active')) {
+              accordion_content.style.maxHeight = accordion_content.scrollHeight + 'px';
+            }
+            else {
+              accordion_content.style.maxHeight = 0;
+            }
+          })
+        })
+      </script>
+
+      <script type="text/javascript">
+        document.querySelectorAll('.accordion1_button').forEach(button => {
+          button.addEventListener('click', () => {
+            const accordion1_content = button.nextElementSibling
+
+            button.classList.toggle('accordion1__button--active');
+
+            if (button.classList.contains('accordion1__button--active')) {
+              accordion1_content.style.maxHeight = accordion1_content.scrollHeight + 'px';
+            }
+            else {
+              accordion1_content.style.maxHeight = 0;
+            }
+          })
+        })
+      </script>
+
+
+      
+
+    </div>
+
+    <div class="topLeft" style="position: relative;">
+      <ul class = "orep">
+        <lh> Offensive Scouting Report </lh>
+        <br>
+        <br>
+        {% for x in ops %}
+        <li>{{x}} </li>
+        {% endfor %}
+      </ul>
+      <HR width="780px" color=black size="2.5" align="left">
+      <div class = "next" style="position: absolute;">
+        <ul class = "drep">
+          <lh> Defensive Scouting Report </lh>
+          <br>
+          <br>
+          {% for x in dps %}
+          <li>{{x}} </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
 
 </body>
 

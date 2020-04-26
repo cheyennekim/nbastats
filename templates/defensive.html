@@ -3,7 +3,7 @@
 <header>
 
 
-	<title>{{player.name}}</title>
+  <title>{{player.name}}</title>
 
 </header>
 <style type="text/css">
@@ -14,21 +14,128 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
   
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    overflow-wrap: break-word;
+  }
+
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: auto;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px 5px 5px;
+    position: absolute;
+    font-size: 12px;
+    z-index: 1;
+    bottom: 100%;
+    left: 70%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
 
   .container {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
     grid-gap: 10px;
     padding: 10px;
+    margin-bottom: 80px;
+  }
+  .container1 {
+    overflow: visible;
+    padding: 10px;
+    margin-bottom: 30px;
   }
 
-  .key-stats {
+  .container2 {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+  }
+
+  .container1 img {
+    vertical-align: middle;
+  }
+
+  .key-stats-container {
     height:300px;
     width:auto;
     overflow:auto;
     overflow-x:hidden;
     grid-column-start: 1;
     grid-column-end: 2;
+  }
+
+  .key-table {
+
+    height:300px;
+    width:200px;
+    border-collapse: collapse;
+    white-space: pre;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    font-size: 1.1em;
+    text-align: center;
+    border: 2px solid black;
+
+  }
+
+  .key-table td:hover { /* th:hover also if you wish */
+    background: lightgrey;
+  }
+  table.key-table tbody tr:hover {
+    background: lightgrey;
+  }
+
+  .key-table tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit
+    text-align: center;
+  }
+
+  .key-table th,
+  .key-table td {
+    padding: 15px 10px;
+  }
+
+  .key-table td {
+    border: 2px solid lightgrey;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .key-table thead tr {
+    text-align: left;
+    font-weight: bold;
+    color: black;
+    background-color: darkorange;
+  }
+
+  .key-table tbody tr:last-of-type {
+    border-bottom: 2px solid darkorange;    
   }
 
   .summary {
@@ -40,25 +147,10 @@
     grid-column-end: 5;
   }
 
-  .key-table {
-    grid-column-start: 2
-    grid-column-end: 4;
-    height:300px;
-    width:200px;
-  }
-
-  .key-table thead tr {
-    background-color: darkorange;
-    color: black;
-    text-align: left;
-    font-weight: bold;
-  }
-
 
 
   .player-table {
-    grid-column-start: 2;
-    grid-column-end: 4;
+
     border-collapse: collapse;
     margin-left: auto;
     margin-right: auto;
@@ -100,6 +192,7 @@
     overflow: hidden;
     background-color: #333;
     position: -webkit-sticky;
+    z-index: 1;
     position: sticky;
     top: 0;
     border-radius: 5px 5px 5px 5px;
@@ -169,6 +262,14 @@
     margin-right: -4px;
   }
 
+  .leaderlist ul {
+    list-style: none;
+    background-color: #444;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+  }
+
   a {
     height: 70px;
   }
@@ -194,82 +295,328 @@
     display: flex<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>;
   }
 
+  .image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .icon {
+    position: relative;
+    width: 100%;
+    display:inline-block;
+    border-radius: 50%
+  }
+
+  .icon:hover .overlay {
+    opacity: 1;
+  }
+
+  .icon:hover #nums {
+    display: block;
+  }
+
+  .icon #nums {
+   display: none;
+   position: absolute;
+   width: auto;
+   height: auto;
+   padding: 5px;
+   border: 1px solid blue;  
+   background-color: lightblue; 
+
+ }
+
+ .overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #008CBA;
+  border-radius: 50%
+}
+
+.scoreDist {
+
+}
+* {box-sizing:border-box}
+
+/* Slideshow container */
+.slides_container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Hide the images by default */
+.slide {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.slides_container .text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.button {
+  cursor: pointer;
+  height: 15px;
+  width: 50px;
+  background-color: #bbb;
+  color: white;
+  border-radius: 30%;
+  padding: 16px 32px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 4px 10px;
+  transition-duration: 0.4s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.b1, .b2{
+  width: auto;
+  height: 20px;
+  background-color: white; 
+  color: black; 
+  border: 2px solid black;
+  border-radius: 12px
+}
+.container2 {
+  display: grid;
+  grid-template-areas: 
+  'topLeft topLeft topLeft topRight topRight topRight' 
+  'midLeft midLeft midLeft midRight midRight midRight'; 
+  position: relative; 
+}
+
+.active, .button:hover {
+  background-color: #009879;
+  color: white;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
 
 </style>
 
 
 
 <body>
-	<ul class="navigation">
-		<li><a class="navbar-brand" href="/"><img src="https://i.imgur.com/FiAyjEj.png" width="100" height="40" class="d-inline-block align-top" alt=""></a></li>
-   <li><a class = "master" href= "{{url_for('all_players')}}">NBA Stats Home</a></li>
-   <li><a href = "{{url_for('allteams_page')}}">Teams</a></li>
-   <li><a href = "{{url_for('allplayer_page')}}">Players</a></li>
-   <!-- <li><a href = "#page-top">Back To Top</a></li> -->
- </ul>
- <div class="header">
-  <h1>{{player.name}}</h1>
-</div>
-
-<div class="sec1">
-  <ul class="offdef-nav">
-    <li><a href = "{{url_for('some_player_page', some_player=player.name)}}">Offensive</a></li>
-    <li><a href = "#defensive">Defensive</a></li>
-    <li><a href = "{{url_for('scouting_report', some_player=player.name)}}">Scouting Report</a></li>
+  <ul class="navigation">
+    <li><a class="navbar-brand" href="/"><img src="https://i.imgur.com/FiAyjEj.png" width="100" height="40" class="d-inline-block align-top" alt=""></a></li>
+    <li><a class = "master" href= "{{url_for('all_players')}}">NBA Stats Home</a></li>
+    <li><a href = "{{url_for('allteams_page')}}">Teams</a></li>
+    <li><a href = "{{url_for('allplayer_page')}}">Players</a></li>
+    <!-- <li><a href = "#page-top">Back To Top</a></li> -->
   </ul>
-</div>
-
-
-<div class = "container">
-  <div class = "key-stats">
-    <h1> Key Numbers </h1>
-    <table class = "key-table" style = "width:70%">
-      <thead>
-        <tr>
-          <th> Stat </th>
-          <th> NBA Percentile </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr> 
-          {% for x in lstGD %}
-          <tr>
-           <th> {{x[1]}} </th>
-           <td> {{x[0]}} </td>
-           {% endfor %}
-         </tr>
-       </tbody>
-
-     </table>
-   </div>
-
-   <div class = "summary">
-    <h1 style = "text-align: center"> Summary </h1>
-    <table class = "player-table" style = "width:70%">
-      <thead>
-        <tr> 
-          <th> Min </th>
-          <th> PPG </th>
-          <th> APG </th>
-          <th> FG% </th>
-          <th> 3FG% </th>
-          <th> Orpg </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td> {{player.minutes}} </td>
-          <td> {{player.ppg}} </td>
-          <td> {{player.apg}} </td>
-          <td> {{player.fgper}} </td>
-          <td> {{player.THptper}} </td>
-          <td> {{player.orpg}} </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="header">
+    <h1>{{player.name}}</h1>
   </div>
-</div>
 
+  <div class="sec1">
+    <ul class="offdef-nav">
+      <li><a href = "{{url_for('some_player_page', some_player=player.name)}}">Offensive</a></li>
+      <li><a href = "{{url_for('def_indy', some_player=player.name)}}">Defensive</a></li>
+      <li><a href = "{{url_for('scouting_report', some_player=player.name)}}">Scouting Report</a></li>
+    </ul>
+  </div>
+
+  <div class = "container1">
+    {% for k in iconset %}
+    <div class = "icon" style="width:100px;height:100px">
+      <img src=/static/{{k[0]}} class="iconimage" style="width:100px;height:100px;border-radius: 50%;background: #5B7994; width: 100; box-shadow: 0 9px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); text-align: center;">
+      <div id="nums">{{k[2]}}</div>
+
+      <div class="overlay">
+        <div class="text">{{k[1]}}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class = "container">
+    <div class = "key-stats-container" style="align-self: center">
+      <h1 style = "text-align: center"> Key Numbers </h1>
+      <table class = "key-table" style = "width:70%; align-self: center">
+        <thead>
+          <tr>
+            <th> Stat </th>
+            <th> NBA Percentile </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr> 
+            {% for x in lstG %}
+            <tr>
+             <th class = "tooltip" style= "height: 20px"> {{x[1]}} 
+              <span class="tooltiptext">{{x[2]}}</span>
+            </th>
+            <td> {{x[0]}} </td>
+            {% endfor %}
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+    <div class = "summary">
+      <h1 style = "text-align: center"> Summary </h1>
+      <table class = "player-table" style = "width:70%">
+        <thead>
+          <tr> 
+            <th> Min </th>
+            <th> PPG </th>
+            <th> APG </th>
+            <th> FG% </th>
+            <th> 3FG% </th>
+            <th> Orpg </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td> {{player.minutes}} </td>
+            <td> {{player.ppg}} </td>
+            <td> {{player.apg}} </td>
+            <td> {{player.fgper}} </td>
+            <td> {{player.THptper}} </td>
+            <td> {{player.orpg}} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class = 'container2' float: right;>
+    <div class = "header1" style = "position: absolute; top: 0; left: 75px">
+      <h1 style = "text-align: center; float: left;"> Opponent Field Goal Difference </h1>
+    </div>
+    <img src=/static/{{defend[1]}} style= "width: 400px; height: 320px; position: absolute; top: 120px">
+    <div class = circle>
+      <h1 style="position: absolute; top: 230px; left: 450px; padding: 10px; background-color: #009879; border-radius: 50%; border: 2px solid black"> {{defend[0]}}% </h1>
+    </div>
+
+
+    <div class = "header2" style="position: absolute; right: 220px; top: 0px">
+      <h1 style = "text-align: center;"> Defensive Comparative Impact </h1>
+    </div>
+    <div class = "slides_container" style="position: absolute; right: 70px; top: 120px; border: 2px solid black; margin-bottom: 20px">
+      <div class = "slide fade">
+        <div class="numbertext">1 / 2</div>
+        <img src="/static/defComps___{{name}}.svg" style="width:100%">
+
+      </div>
+      <div class="slide fade">
+        <div class="numbertext">2 / 3</div>
+        <img src="/static/defComps2___{{name}}.svg" style="width:100%;">
+
+      </div>
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <br>
+    <div style="text-align:center; position: absolute; right: 280px; top: 65px;">
+      <span class="button b1" onclick="currentSlide(1)"> Per Game </span>
+      <span class="button b2" onclick="currentSlide(2)"> Shot Defense </span>
+    </div>
+    <script type="text/javascript">
+      var slideIndex = 1;
+      showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("slide");
+  var dots = document.getElementsByClassName("button");
+  if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex-1].style.display = "block";
+      dots[slideIndex-1].className += " active";
+    }
+  </script>
+</div>
 
 
 </body>
