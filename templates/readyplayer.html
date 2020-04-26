@@ -418,6 +418,47 @@
   animation-duration: 1.5s;
 }
 
+ .tooltip {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  overflow-wrap: break-word;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: auto;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 5px 5px 5px;
+  position: absolute;
+  font-size: 14px;
+  z-index: 1;
+  bottom: 100%;
+  left: 70%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
 @-webkit-keyframes fade {
   from {opacity: .4}
   to {opacity: 1}
@@ -478,7 +519,9 @@
         <tr> 
           {% for x in lstG %}
           <tr>
-           <th> {{x[1]}} </th>
+           <th class = "tooltip" style="height: 25px"> {{x[1]}} 
+            <span class="tooltiptext">{{x[2]}}</span>
+           </th>
            <td> {{x[0]}} </td>
            {% endfor %}
          </tr>
