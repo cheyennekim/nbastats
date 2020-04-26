@@ -64,8 +64,8 @@ def some_player_page(some_player):
     #list of icons with statistical descriptions
     for x in goodStats:
         #creating lst of stat percentiles greater than 90
-        if x[2] in offDex:
-            offNums.append((x[0], x[1]))
+        if x[3] in offDex:
+            offNums.append((x[0], x[1], x[2]))
     
     models.pieCharter(some_player)
     models.compOff(some_player)
@@ -85,8 +85,8 @@ def def_indy(some_player):
     defNums = []
     goodStats = models.checkerG(some_player, 90.0)
     for x in goodStats:
-        if x[2] in defDex:
-            defNums.append((x[0], x[1]))
+        if x[3] in defDex:
+            defNums.append((x[0], x[1], x[2]))
     
     pcent = models.percentile(some_player)
     #lst of each stat percentile

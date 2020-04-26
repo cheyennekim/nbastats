@@ -484,22 +484,27 @@ def percentile(playerName):
 def checkerG(name, good):
     index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 40: "fgDiffPer", 41: "touches", 42: "fcTouch", 43: "timeOfpos", 44: "avgSecTouch", 45: "ppTouch", 46: "elbowTouch", 47: "postUps", 48: "paintTouch", 49: "ppElb", 50: "ppPost", 51: "ppPaint", 52: "drives", 53: "dFGA", 54: "dFGper", 55: "dpts", 56: "dPassPer", 57: "dAstPer", 58: "dTovPer", 59: "dFoulPer"}
     check1 = percentile(name)
+    phrase = {0: "Points per Game", 1: "Assists per Game", 2: "Turnovers per Game", 3: "Offensive Rebounds per Game", 4: "Field Goal Percentage", 5: "Minutes per Game", 6: "Three Point Attempt Rate", 7: "Mid Range as Percentage of Points Scored", 8: "Three Pointers as Percentage of Points Scored", 9: "Fast Break Points as a Percentage of Points Scored", 10: "Free Throws as a Percentage of Points Scored", 11: "Points in the Paint as a Percentage of Points Scored", 12: "Percent of Field Goals Made Unassisted", 13: "Three Point Attempt Rate", 14: "Three Point Shooting Percentage", 15: "Free Throw Attempts per Game", 16: "Free Throw Percentage", 17: "Contested Three Point Percentage", 18: "Driving Points per Game", 19: "Driving Field Goal Percentage", 20: "Catch-and-Shoot Points Per Game", 21: "Catch-and-Shoot Shooting Percentage",
+     22: "Pull-up Points per Game", 23: "Pull-up Shooting Percentage", 24: "Post-up Points per Game", 25: "Post-up Shooting Percentage", 26: "Elbow Points per Game", 27: "Elbow Shooting Percentage", 28: "Defensive Rebounds per Game", 29: "Defensive Rebounding Percentage", 30: "Steals per Game", 31: "Blocks per Game", 32: "Opponent Points Off Turnovers per Game", 33: "Opponent Second-Chance Points per Game", 34: "Opponent Points in the Paint per Game", 35: "Opponent Field Goal Percentage < 8ft", 36: "Opponent Field Goal Percentage Between 8ft and 16ft", 37: "Opponent Field Goal Percentage > 24ft", 38: "Games Played", 40: "Opponent Field Goal Percentage Differential", 41: "Touches per Game", 42: "Front-court Touches per Game", 43: "Time of Possession per Game", 44: "Average Seconds per Touch", 45: "Points per Touch", 46: "Elbow Touches per Game",
+      47: "Post Touches per Game", 48: "Paint Touches per Game", 49: "Points per Elbow Touch", 50: "Points per Post Touch", 51: "Points per Paint Touch", 52: "Drives per Game", 53: "Driving Field Goal Attempts per Game", 54: "Driving Field Goal Percentage", 55: "Driving Points per Game", 56: "Driving Pass Percentage", 57: "Driving Assist Percentage", 58: "Driving Turnover Percentage", 59: "Driving Foul Percentage"}
     lstG = []
     for x in range(len(check1)):
         if x != 39:
             if check1[x] > good:
-                lstG.append((check1[x], index[x], x))
+                lstG.append((check1[x], index[x], phrase[x], x))
     return lstG
-
 # print(checkerG("James Harden", 90))
 
 def checkerB(name, bad):
     index = {0: "ppg", 1: "apg", 2: "tov", 3: "orpg", 4: "fgper", 5: "minutes", 6: "THptAr", 7: "TWptmr", 8: "THptr", 9: "fbpsr", 10: "ftr", 11: "pipr", 12: "fgmUass", 13: "THptAtt", 14: "THptper", 15: "ftAtt", 16: "ftper", 17: "THptperD", 18: "drPts", 19: "drPer", 20: "casPts", 21: "casPer", 22: "pullPts", 23: "pullPer", 24: "postPts", 25: "postPer", 26: "elbPts", 27: "elbPer", 28: "drpg", 29: "drebPer", 30: "spg", 31: "bpg", 32: "oppPoT", 33: "oppPsec", 34: "oppPIP", 35: "eightPer", 36: "sixTwentyPer", 37: "twenFourPer", 38: "gp", 40: "fgDiffPer", 41: "touches", 42: "fcTouch", 43: "timeOfpos", 44: "avgSecTouch", 45: "ppTouch", 46: "elbowTouch", 47: "postUps", 48: "paintTouch", 49: "ppElb", 50: "ppPost", 51: "ppPaint", 52: "drives", 53: "dFGA", 54: "dFGper", 55: "dpts", 56: "dPassPer", 57: "dAstPer", 58: "dTovPer", 59: "dFoulPer"}
+    phrase = {0: "Points per Game", 1: "Assists per Game", 2: "Turnovers per Game", 3: "Offensive Rebounds per Game", 4: "Field Goal Percentage", 5: "Minutes per Game", 6: "Three Point Attempt Rate", 7: "Mid Range as Percentage of Points Scored", 8: "Three Pointers as Percentage of Points Scored", 9: "Fast Break Points as a Percentage of Points Scored", 10: "Free Throws as a Percentage of Points Scored", 11: "Points in the Paint as a Percentage of Points Scored", 12: "Percent of Field Goals Made Unassisted", 13: "Three Point Attempt Rate", 14: "Three Point Shooting Percentage", 15: "Free Throw Attempts per Game", 16: "Free Throw Percentage", 17: "Contested Three Point Percentage", 18: "Driving Points per Game", 19: "Driving Field Goal Percentage", 20: "Catch-and-Shoot Points Per Game", 21: "Catch-and-Shoot Shooting Percentage",
+     22: "Pull-up Points per Game", 23: "Pull-up Shooting Percentage", 24: "Post-up Points per Game", 25: "Post-up Shooting Percentage", 26: "Elbow Points per Game", 27: "Elbow Shooting Percentage", 28: "Defensive Rebounds per Game", 29: "Defensive Rebounding Percentage", 30: "Steals per Game", 31: "Blocks per Game", 32: "Opponent Points Off Turnovers per Game", 33: "Opponent Second-Chance Points per Game", 34: "Opponent Points in the Paint per Game", 35: "Opponent Field Goal Percentage < 8ft", 36: "Opponent Field Goal Percentage Between 8ft and 16ft", 37: "Opponent Field Goal Percentage > 24ft", 38: "Games Played", 40: "Opponent Field Goal Percentage Differential", 41: "Touches per Game", 42: "Front-court Touches per Game", 43: "Time of Possession per Game", 44: "Average Seconds per Touch", 45: "Points per Touch", 46: "Elbow Touches per Game",
+      47: "Post Touches per Game", 48: "Paint Touches per Game", 49: "Points per Elbow Touch", 50: "Points per Post Touch", 51: "Points per Paint Touch", 52: "Drives per Game", 53: "Driving Field Goal Attempts per Game", 54: "Driving Field Goal Percentage", 55: "Driving Points per Game", 56: "Driving Pass Percentage", 57: "Driving Assist Percentage", 58: "Driving Turnover Percentage", 59: "Driving Foul Percentage"}
     check1 = check(name)
     lstB = []
     for x in range(len(check1)):
         if check1[x] < bad:
-            lstB.append((check1[x], index[x]))
+            lstB.append((check1[x], index[x], phrase[x]))
     return lstB
 
 def leagueLead(perc):
@@ -991,7 +996,6 @@ def kNearSalary(player, k):
         lst = dfSal[x[0]].tolist()
         nums.append(lst[1])
     return mean(nums)
-
 
 
 

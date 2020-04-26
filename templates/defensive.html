@@ -14,6 +14,46 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
   
+ .tooltip {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  overflow-wrap: break-word;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: auto;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 5px 5px 5px;
+  position: absolute;
+  font-size: 12px;
+  z-index: 1;
+  bottom: 100%;
+  left: 70%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
 
   .container {
     display: grid;
@@ -355,9 +395,9 @@
 </div>
 
 <div class = "container">
-  <div class = "key-stats-container">
+  <div class = "key-stats-container" style="align-self: center">
     <h1 style = "text-align: center"> Key Numbers </h1>
-    <table class = "key-table" style = "width:70%">
+    <table class = "key-table" style = "width:70%; align-self: center">
       <thead>
         <tr>
           <th> Stat </th>
@@ -368,7 +408,9 @@
         <tr> 
           {% for x in lstG %}
           <tr>
-           <th> {{x[1]}} </th>
+           <th class = "tooltip" style= "height: 20px"> {{x[1]}} 
+            <span class="tooltiptext">{{x[2]}}</span>
+           </th>
            <td> {{x[0]}} </td>
            {% endfor %}
          </tr>
