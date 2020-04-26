@@ -81,6 +81,7 @@ def some_player_page(some_player):
 def def_indy(some_player):
 
     Player = models.PlayerOff.query.filter_by(name=some_player).first()
+    PlayerDef = models.PlayerDef.query.filter_by(name=some_player).first()
     defDex = [28,29,30,31,32,33,34,35,36,37,38,40]    
     defNums = []
     goodStats = models.checkerG(some_player, 90.0)
@@ -107,9 +108,17 @@ def def_indy(some_player):
     models.compOff(some_player)
     models.compOff2(some_player)
 
+    defPhoto = []
+    if PlayerDef.fgDiffPer > 0:
+        defPhoto.append(PlayerDef.fgDiffPer)
+        defPhoto.append("UPUP.svg")
+    else:
+        defPhoto.append(PlayerDef.fgDiffPer)
+        defPhoto.append("DOWNDOWN.svg")
+
     top = models.offtopThree(pcent)
 
-    return render_template('defensive.html', player=Player, lstG=defNums, iconset = iconlst, name = Player.name, lead = lgleader)
+    return render_template('defensive.html', player=Player, lstG=defNums, iconset = iconlst, name = Player.name, lead = lgleader, defend = defPhoto)
 
 @app.route('/<some_player>/scoutingreport')
 def scouting_report(some_player):
