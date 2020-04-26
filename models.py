@@ -806,6 +806,9 @@ def kNearPhys(player, k):
 diction = setDic()
 dfTran = pd.DataFrame(data=diction)
 dfTran2 = pd.DataFrame(data=diction)
+dfTran3 = pd.DataFrame(data=diction)
+dfTran4 = pd.DataFrame(data=diction)
+
 dfdf = dfTran.T 
 dfdf2 = dfTran2.T
 df2 = dfdf[[19, 23, 21]].copy()
@@ -813,6 +816,14 @@ df3 = df2.T
 
 df4 = dfdf2[[14, 27, 4]].copy()
 df5 = df4.T
+
+df6 = dfTran3.T
+df7 = df6[[29,30,31]].copy()
+df8 = df7.T
+
+df9 = dfTran3.T
+df10 = df9[[35,36,37]].copy()
+df11 = df10.T
 
 
 
@@ -983,6 +994,174 @@ def compOff2(player):
     # print(queryVals)
     return None
 
+def compDef(player):
+    fig = go.Figure()
+    compsA = kNearPhys(player, 20)
+    comps = []
+    for x in compsA:
+        comps.append(x[0])
+
+
+    compsDF = df7.loc[comps, :]
+    med = compsDF.median(axis=0)
+    med = med.values.tolist()
+
+
+    queryVals = df8[player].values.tolist()
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[2],
+        delta = {'reference': med[2]},
+        domain = {'x': [0.3, 1], 'y': [0.1, 0.3]},
+        title = {'text': "Blocks per Game"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 3]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[2]},
+            'steps': [
+                {'range': [0, 0.6], 'color': "#FFDD00"},
+                {'range': [0.6, 1.2], 'color': "#FFB300"},
+                {'range': [1.2, 1.8], 'color': '#FF8000'},
+                {'range': [1.8, 2.4], 'color': '#FF5500'},
+                {'range': [2.4, 3], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[1],
+        delta = {'reference': med[1]},
+        domain = {'x': [0.3, 1], 'y': [0.4, 0.6]},
+        title = {'text': "Steals per Game"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 3]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[1]},
+            'steps': [
+                {'range': [0, 0.6], 'color': "#FFDD00"},
+                {'range': [0.6, 1.2], 'color': "#FFB300"},
+                {'range': [1.2, 1.8], 'color': '#FF8000'},
+                {'range': [1.8, 2.4], 'color': '#FF5500'},
+                {'range': [2.4, 3], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[0],
+        delta = {'reference': med[0]},
+        domain = {'x': [0.3, 1], 'y': [0.7, 0.9]},
+        title = {'text': "DReb Percentage"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 50]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[0]},
+            'steps': [
+                {'range': [0, 10], 'color': "#FFDD00"},
+                {'range': [10, 20], 'color': "#FFB300"},
+                {'range': [20, 30], 'color': '#FF8000'},
+                {'range': [30, 40], 'color': '#FF5500'},
+                {'range': [40, 50], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+
+    fig.update_layout(height = 400 , margin = {'t':0, 'b':0, 'l':0})
+
+    strFile = "static/defComps___" + player + ".svg"
+    fig.write_image(strFile)
+    # print(med)
+    # print(queryVals)
+    return None
+
+def compDef2(player):
+    fig = go.Figure()
+    compsA = kNearPhys(player, 20)
+    comps = []
+    for x in compsA:
+        comps.append(x[0])
+
+
+    compsDF = df10.loc[comps, :]
+    med = compsDF.median(axis=0)
+    med = med.values.tolist()
+    print("XXXX")
+    print(med)
+
+    queryVals = df11[player].values.tolist()
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[2],
+        delta = {'reference': med[2]},
+        domain = {'x': [0.3, 1], 'y': [0.1, 0.3]},
+        title = {'text': "> 24 Feet"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[2]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[1],
+        delta = {'reference': med[1]},
+        domain = {'x': [0.3, 1], 'y': [0.4, 0.6]},
+        title = {'text': "16 - 24 Feet"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[1]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+    fig.add_trace(go.Indicator(
+        mode = "number+gauge+delta", value = queryVals[0],
+        delta = {'reference': med[0]},
+        domain = {'x': [0.3, 1], 'y': [0.7, 0.9]},
+        title = {'text': "< 8 Feet"},
+        gauge = {
+            'shape': "bullet",
+            'axis': {'range': [None, 100]},
+            'threshold': {
+                'line': {'color': "blue", 'width': 5},
+                'thickness': 0.75,
+                'value': med[0]},
+            'steps': [
+                {'range': [0, 20], 'color': "#FFDD00"},
+                {'range': [20, 40], 'color': "#FFB300"},
+                {'range': [40, 60], 'color': '#FF8000'},
+                {'range': [60, 80], 'color': '#FF5500'},
+                {'range': [80, 100], 'color': '#FF0000'}],
+            'bar': {'color': "black"}}))
+
+
+    fig.update_layout(height = 400 , margin = {'t':0, 'b':0, 'l':0})
+
+    strFile = "static/defComps2___" + player + ".svg"
+    fig.write_image(strFile)
+    # print(med)
+    # print(queryVals)
+    return None
 # p = percentile("James Harden")
 # print(p[4])
 # print(p[27])
@@ -997,5 +1176,5 @@ def kNearSalary(player, k):
         nums.append(lst[1])
     return mean(nums)
 
-
+compDef2("James Harden")
 
