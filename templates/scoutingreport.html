@@ -181,11 +181,61 @@ a {
   top: 120px;
 }
 
+.accordion1_button {
+  display: block;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 25px 0;
+  width: 500px;
+  font-size: 1.2em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-radius: 5px 5px 5px 5px;
+  background-color: #009879;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 12px 15px;
+  position: absolute;
+  right: 75px;
+  top: 190px;
+}
+
+.accordion1_button::after{
+  content: '\25be';
+  float: right;
+  transform: scale(1.5);
+}
+
+.accordion1_button--active {background: #555555}
+.accordion1_button--active::after {content: '\25b4'}
+
+.accordion1_content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.2s;
+  position: absolute;
+  top: 270px;
+  right: 75px;
+  width: 470px;
+  padding: 0 15px;
+  background: rgba(0, 152, 121, 1.0);
+  z-index: 2
+}
+
+
+.active, .accordion1_button:hover {
+  background-color: #333;
+  transition: 0.5s;
+}
+
 .but::after {
   content: '\25be';
   float: right;
   transform: scale(1.5);
 }
+
+
 
 .but--active { background: #333 }
 .but--active::after { content: '\25b4'; }
@@ -198,13 +248,18 @@ a {
   right: 75px;
   width: 470px;
   padding: 0 15px;
-  background: rgba(0, 152, 121, 0.4);
+  background: rgba(0, 152, 121, 1.0);
+  z-index: 1;
 }
+
+
 
 .active, .but:hover {
   background-color: #333;
   transition: 0.5s;
 }
+
+
 
 
 .salTable th {
@@ -297,6 +352,21 @@ body {
         </div>
       </div>
 
+      <div class="accordion1">
+        <button type="button" class="accordion1_button accordion1__button--active"> Who are {{player.name}}'s comparisons? </button>
+        <div class = "accordion1_content">
+          <p>
+            {% for x in comp %}
+            <li>{{x[0]}} </li>
+            {% endfor %}
+          </p>
+        </div>
+      </div>
+
+      
+
+
+
       <script type="text/javascript">
         document.querySelectorAll('.but').forEach(button => {
           button.addEventListener('click', () => {
@@ -313,6 +383,27 @@ body {
           })
         })
       </script>
+
+      <script type="text/javascript">
+        document.querySelectorAll('.accordion1_button').forEach(button => {
+          button.addEventListener('click', () => {
+            const accordion1_content = button.nextElementSibling
+
+            button.classList.toggle('accordion1__button--active');
+
+            if (button.classList.contains('accordion1__button--active')) {
+              accordion1_content.style.maxHeight = accordion1_content.scrollHeight + 'px';
+            }
+            else {
+              accordion1_content.style.maxHeight = 0;
+            }
+          })
+        })
+      </script>
+
+
+      
+
     </div>
 
     <div class="topLeft">
