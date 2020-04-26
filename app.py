@@ -115,8 +115,8 @@ def scouting_report(some_player):
     Player = models.PlayerOff.query.filter_by(name=some_player).first()
     playSal = models.salary.query.filter_by(name=some_player).first()
 
-    LandaSalary = models.kNearSalary(some_player, 2)
-
+    LandaSalary = models.kNearSalary(some_player, 5)
+    comps = models.kNearProduction(some_player, 5)
     LandaSalary = "{:,}".format(round(LandaSalary))
     salary = playSal.nineteen
     salary = "{:,}".format(round(salary))
@@ -124,7 +124,7 @@ def scouting_report(some_player):
 
 
     
-    return render_template('scoutingreport.html', player=Player, LandaSal = LandaSalary, sal = salary, name = Player.name, ops = offPS)
+    return render_template('scoutingreport.html', player=Player, LandaSal = LandaSalary, sal = salary, name = Player.name, ops = offPS, comp = comps)
 
 
 @app.route('/allteams/<some_team>')

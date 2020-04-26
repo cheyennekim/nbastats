@@ -973,6 +973,8 @@ def kNearSalary(player, k):
         nums.append(lst[1])
     return mean(nums)
 
+print(kNearProduction("James Harden", 10))
+
 # print(some_player_page("James Harden"))
 # per = checkerG("James Harden", 90)
 # print(per)
