@@ -618,9 +618,11 @@ def offtopThree(player):
     lst.append((thirddex, third))
     return lst
 
-def offPS(some_player):
+def offPSCheck(some_player, min):
     perc = percentile(some_player)
     lst = []
+    if perc[43] > 90.0:
+        lst.append("Offense runs through him")
     if perc[8] > 85.0 and perc[16] > 85.0:
         lst.append("Efficient Perimeter Threat")
     elif perc[8] > 90.0:
@@ -650,26 +652,24 @@ def offPS(some_player):
         lst.append("Does most of his damage in the mid-range")
     elif perc[11] > 90.0:
         lst.append("Does most of his damage in the paint")
+    elif perc[46] > 90.0:
+        lst.append("His game revolves around the elbow")
 
     if perc[44] > 90.0:
         lst.append("Likes to hold the ball")
-    if perc[43] > 90.0:
-        lst.append("Offense runs through him")
 
     if perc[52] > 90.0 and perc[56] > 90.0 and perc[55] > 90.0:
-        lst.append("Attacks the basket --> can both finish and find teammates on the drive")  
+        lst.append("Attacks the basket - can both finish and find teammates on the drive")  
     elif perc[52] > 90.0 and perc[56] > 90.0:
-        lst.append("Likes to attack the basket --> pass-heavy on the drive")
+        lst.append("Likes to attack the basket - pass-heavy on the drive")
     elif perc[52] > 90.0 and perc[55] > 90.0:
-        lst.append("Likes to attack the basket --> shot-heavy on the drive")
+        lst.append("Likes to attack the basket - shot-heavy on the drive")
     elif perc[52] > 90.0:
         lst.append("Likes to attack the basket")
 
 
     if perc[47] > 90.0 or perc[24] > 90.0:
         lst.append("Threat in the post")
-    elif perc[46] > 90.0:
-        lst.append("His game is revolves around the elbow")
 
 
     if perc[20] > 90.0 and perc[22] > 90.0:
@@ -679,14 +679,70 @@ def offPS(some_player):
     elif perc[22] > 90.0:
         lst.append("Pull-up scorer")
 
-
     if perc[1] > 90.0:
         lst.append("Finds teammates")
 
-
-
+    if len(lst) < 6:
+        if perc[58] > 90.0:
+            lst.append("Turns the ball over at a high rate on the drive")
+        if perc[59] > 90.0:
+            lst.append("Draws lots of fouls on the drive")
     return lst
 
+def defPSCheck(some_player, min):
+    perc = percentile(some_player)
+    lst = []
+
+    if perc[28] > 90.0 and perc[29] > 90.0:
+        lst.append("Great defensive rebounder")
+    elif perc[28] > 90.0:
+        lst.append("Crashes the boards defensively")
+    elif perc[29] > 90.0:
+        lst.append("Efficient defensive rebounder")
+
+    if perc[30] > 90.0:
+        lst.append("Good on-ball defender, picks up lots of steals")
+    if perc[31] > 95.0:
+        lst.append("Premier shot-blocker")
+    elif perc[31] > 90.0:
+        lst.append("Good shot-blocker")
+
+
+    if perc[34] > 90.0:
+        lst.append("Allows good amount of paint points")
+    if perc[40] > 95.0:
+        lst.append("Closes out extremely well on shots - one of the best in the league at decreasing opposition field goal percentage")
+    elif perc[40] > 90.0:
+        lst.append("Closes out well on shots - decreases oppositions field goal percentage substantially")
+    elif perc[40] > 85.0:
+        lst.append("Closes out well on shots")
+
+    if perc[35] > 90.0:
+        lst.append("Does well guarding inside of eight feet")
+    if perc[36] > 90.0:
+        lst.append("Guards mid-range to three-point line exceptionally")
+    if perc[37] > 90.0:
+        lst.append("Great perimeter defender")
+    return lst
+
+def offPS(some_player):
+    lst = offPSCheck(some_player, 90.0)
+    if len(lst) < 4:
+        lst = lst + offPSCheck(some_player, 85.0)
+    if len(lst) < 4:
+        lst = lst + offPSCheck(some_player, 80.0)
+    lst = list(dict.fromkeys(lst))
+    return lst
+
+def defPS(some_player):
+    lst = defPSCheck(some_player, 90.0)
+    if len(lst) < 2:
+        lst = lst + defPSCheck(some_player, 85.0)
+    if len(lst) < 1:
+        lst = lst + defPSCheck(some_player, 80.0)
+    lst = list(dict.fromkeys(lst))
+    return lst
+print(offPSCheck("James Harden", 90.0))
 # print(offtopThree("James Harden"))
 dfScale = df.transpose(copy=True)
 p = percentile("James Harden")
@@ -740,8 +796,7 @@ def kNearPhys(player, k):
     sort = sorted(nameDiffs, key = lambda x: x[1])
     return sort[:k]
 
-def kNearPlayStyle(player, k):
-    None
+
 
 diction = setDic()
 dfTran = pd.DataFrame(data=diction)
@@ -755,42 +810,6 @@ df4 = dfdf2[[14, 27, 4]].copy()
 df5 = df4.T
 
 
-
-# def compOff(player):
-#     my_range=(range(1,len(df3.index)+1))
-#     compsA = kNearPhys(player, 20)
-#     comps = []
-#     for x in compsA:
-#         comps.append(x[0])
-
-
-    # labels = ["fgper", "THptper", "drPer", "casPer", "pullPer", "postPer", "elbPer"]
-
-#     compsDF = df2.loc[comps, :]
-#     med = compsDF.median(axis=0)
-#     med = med.values.tolist()
-
-#     queryVals = df3["James Harden"].values.tolist()
-
-#     myDFList = [['fg %', med[0], 'Comps'], ['3pt %', med[1], 'Comps'], ['Driveshot %', med[2], 'Comps'], ['Catch & Shoot %', med[3], 'Comps'], ['Pull-up %', med[4], 'Comps'], ['Post-up %', med[5], 'Comps'], ['Elbow %', med[6], 'Comps'], ['fg %', queryVals[0], player], ['3pt %', queryVals[1], player], ['Driveshot %', queryVals[2], player], ['Catch & Shoot %', queryVals[3], player], ['Pull-up %', queryVals[4], player], ['Post-up %', queryVals[5], player], ['Elbow %', queryVals[6], player]]
-#     myDF = pd.DataFrame(myDFList, columns=['Stat', 'Percentage', 'Player'])
-
-#     sns.catplot(x='Stat', y='Percentage', hue='Player', data=myDF, kind='bar')
-#     plt.show()
-    # plt.hlines(y=my_range, xmin=df3[player], xmax=med, color='grey', alpha=0.4)
-    # plt.scatter(df3[player], my_range, color='skyblue', alpha=1, label=player)
-    # plt.scatter(med, my_range, color='green', alpha=0.4 , label='Comps')
-    # plt.legend()
-    # plt.yticks(my_range, labels)
-    # plt.title("Comparison of the value 1 and the value 2", loc='left')
-    # plt.xlabel('Value of the variables')
-    # plt.ylabel('Group')
-
-    # strFile = "static/offComps_" + player + ".svg"
-    # plt.savefig(strFile)
-    # plt.show
-    # plt.close()
-    # return None
 
 def compOff(player):
     fig = go.Figure()
@@ -973,51 +992,6 @@ def kNearSalary(player, k):
         nums.append(lst[1])
     return mean(nums)
 
-print(kNearProduction("James Harden", 10))
 
-# print(some_player_page("James Harden"))
-# per = checkerG("James Harden", 90)
-# print(per)
-# print(iconSet(per, "James Harden"))
-# print(kNearPhys("JJ Redick", 3))
 
-# print(dfScale.loc[['James Harden']])
-# B = pd.Series(dfScale.loc[['LeBron James']])
-# xx = dfScale.loc[['LeBron James']]
-# y = dfScale.loc[['James Harden']]
-# dude = dfScale.loc["Tacko Fall"].values.tolist()
-# dude1 = dfScale.loc["LeBron James"].values.tolist()
-# print(euc(dude,dude1))
-# dude = dfScale.loc["Russell Westbrook"].values.tolist()
-# dude1 = dfScale.loc["Russell Westbrook"].values.tolist()
-# print(euc(dude,dude1))
-#dfScale = MINMAX SCALED VERSION OF DF
-# print(dfScale)
-# maxi = dfScale.max()
-
-# print(dfScale.max())
-# print(dfScale.idxmax())
-# data = stat_list[15][1]
-# plt.hist(data, bins='auto')
-print(dic["Joe Ingles"][14])
-print(dic["Joe Ingles"][27])
-print(dic["Joe Ingles"][4])
-print(percentile("Justin Holiday")[4])
-
-# plt.show()
-# for player, numbers in df.iteritems():
-#     print(numbers)
-# for col in df.columns:
-#     print(col)
-# df1 = pd.concat(df[', axis=1, keys=headers)
-# df.plot.hist(alpha=0.5);
-# pro = (kNearProduction("James Harden", 10))
-# ls = []
-# for x in pro:
-#     ls.append(x[0])
-#     ls.append(dfSal[x[0]].tolist()[1])
-# print(ls)
-# print(df3["James Harden"])
-# print(df5["James Harden"])
-# print(dic["James Harden"][29])
 

@@ -21,7 +21,7 @@
     display: grid;
     grid-template-areas: 
     'topLeft topLeft topLeft topRigh topRigh topRight' 
-    'midLeft midLeft midLeft midRigh midRigh midRight'
+    'far midLeft midLeft midRigh midRigh midRight'
     'left left middle middle right right' 
     'footer footer footer footer footer footer';
     /* grid-column-gap: 10px; - if you want gap between the columns */
@@ -286,8 +286,7 @@ a {
   text-align: left;
   font-size: 20px;
   font-family: sans-serif;
-  border-bottom: 2px solid #009879;
-
+  bottom-padding: 30px
 }
 
 .orep lh {
@@ -296,6 +295,18 @@ a {
   color: #009879;
 }
 
+.drep {
+  text-align: left;
+  font-size: 20px;
+  font-family: sans-serif;
+
+}
+
+.drep lh {
+  font-weight: bold;
+  font-size: 25px;
+  color: #009879;
+}
 
 
 body {
@@ -406,15 +417,26 @@ body {
 
     </div>
 
-    <div class="topLeft">
+    <div class="topLeft" style="position: relative;">
       <ul class = "orep">
         <lh> Offensive Scouting Report </lh>
         <br>
         <br>
-      {% for x in ops %}
-      <li>{{x}} </li>
-      {% endfor %}
-    </ul>
+        {% for x in ops %}
+        <li>{{x}} </li>
+        {% endfor %}
+      </ul>
+      <HR width="780px" color=black size="2.5" align="left">
+      <div class = "next" style="position: absolute;">
+        <ul class = "drep">
+          <lh> Defensive Scouting Report </lh>
+          <br>
+          <br>
+          {% for x in dps %}
+          <li>{{x}} </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 
