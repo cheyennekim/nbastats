@@ -33,9 +33,14 @@
       <a class="nav-item nav-link" href="{{url_for('allteams_page')}}">Teams</a>
       <a class="nav-item nav-link" href="{{url_for('allplayer_page')}}">Players</a>
    </u1>
+   {% from "_formhelpers2.html" import render_field %}
+    <form method="post">
+    {{ render_field(form.search, class="form-control", placeholder="Search") }}
+    </form>
     </div>
   </div>
 </nav>
+
 
 <br><br>
 <br></br>
@@ -116,6 +121,13 @@
   color: #484848;
   border-bottom: 2px solid #FA8320;
 }
+.form-control{
+        width: 20%;
+        margin-left: 900px;
+        border-radius: 80px;
+        margin-top: -10px;
+
+    }
 
 </style>
 <!-- <style type="text/css">
