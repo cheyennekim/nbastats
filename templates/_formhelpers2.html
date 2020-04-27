@@ -1,0 +1,27 @@
+<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% macro render_field(field) %}
+<div class="input-group" placeholder="Search"></div>
+    {{ field.label }}
+    {{ field(**kwargs)|safe }} 
+</div>
+    {% if field.errors %}
+        <ul class="errors">
+        {% for error in field.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+
+<style>
+    .form-control{
+        width: 50%;
+    }
+
+    .input-group{
+        width: 50%;
+    }
+</style>

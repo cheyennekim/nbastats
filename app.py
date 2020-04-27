@@ -27,21 +27,29 @@ def all_players():
     return render_template('first.html', players=players, form=search)
 
 
-@app.route('/allplayers')
+@app.route('/allplayers',methods=['GET', 'POST'])
 def allplayer_page():
     players = models.IsOn.query.join(models.Player, models.IsOn.player == models.Player.name)\
         .add_columns(models.IsOn.player, models.IsOn.team, models.Player.age)
-    return render_template('allplayers.html', players=players)
+    search = SearchForm(request.form)
+    search_string = search.data['search']
+    if request.method == 'POST':
+        return search_page(search_string)
+    return render_template('allplayers.html', players=players, form=search)
 
 
-@app.route('/allteams')
+@app.route('/allteams', methods=['GET', 'POST'])
 def allteams_page():
     teams = models.Teams.query.join(models.CoachedBy, models.Teams.teamabv == models.CoachedBy.team)\
         .add_columns(models.Teams.teamname, models.Teams.teamabv, models.CoachedBy.coach)
-    return render_template('allteams.html', teams=teams)
+    search = SearchForm(request.form)
+    search_string = search.data['search']
+    if request.method == 'POST':
+        return search_page(search_string)
+    return render_template('allteams.html', teams=teams, form=search)
 
 
-@app.route('/<some_player>')
+@app.route('/<some_player>',methods=['GET', 'POST'])
 def some_player_page(some_player):
     Player = models.PlayerOff.query.filter_by(name=some_player).first()
     offDex = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59]
@@ -74,10 +82,13 @@ def some_player_page(some_player):
     top = models.offtopThree(pcent)
 
     # offNums=[('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0),('fg%', 80.0)]
+    search = SearchForm(request.form)
+    search_string = search.data['search']
+    if request.method == 'POST':
+        return search_page(search_string)
+    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = iconlst, name = Player.name, lead = lgleader, form=search)
 
-    return render_template('readyplayer.html', player=Player, lstG=offNums, iconset = iconlst, name = Player.name, lead = lgleader)
-
-@app.route('/<some_player>/defense')
+@app.route('/<some_player>/defense',methods=['GET', 'POST'])
 def def_indy(some_player):
 
     Player = models.PlayerOff.query.filter_by(name=some_player).first()
@@ -117,10 +128,13 @@ def def_indy(some_player):
         defPhoto.append("DOWNDOWN.svg")
 
     top = models.offtopThree(pcent)
+    search = SearchForm(request.form)
+    search_string = search.data['search']
+    if request.method == 'POST':
+        return search_page(search_string)
+    return render_template('defensive.html', player=Player, lstG=defNums, iconset = iconlst, name = Player.name, lead = lgleader, defend = defPhoto, form =search)
 
-    return render_template('defensive.html', player=Player, lstG=defNums, iconset = iconlst, name = Player.name, lead = lgleader, defend = defPhoto)
-
-@app.route('/<some_player>/scoutingreport')
+@app.route('/<some_player>/scoutingreport',methods=['GET', 'POST'])
 def scouting_report(some_player):
     Player = models.PlayerOff.query.filter_by(name=some_player).first()
     playSal = models.salary.query.filter_by(name=some_player).first()
@@ -132,28 +146,32 @@ def scouting_report(some_player):
     salary = "{:,}".format(round(salary))
     offPS = models.offPS(some_player)
     defPS = models.defPS(some_player)
+    search = SearchForm(request.form)
+    search_string = search.data['search']
+    if request.method == 'POST':
+        return search_page(search_string)
+    return render_template('scoutingreport.html', player=Player, LandaSal = LandaSalary, sal = salary, form=search, name = Player.name, ops = offPS, comp = comps, dps = defPS)
 
 
-    
-    return render_template('scoutingreport.html', player=Player, LandaSal = LandaSalary, sal = salary, name = Player.name, ops = offPS, comp = comps, dps = defPS)
-
-
-@app.route('/allteams/<some_team>')
+@app.route('/allteams/<some_team>',methods=['GET', 'POST'])
 def teams_page(some_team):
     Teams = db.session.execute(
         'WITH temp1 as (select * from Teams, CoachedBy where Teams.teamabv = :val and Teams.teamabv = CoachedBy.team), temp2 as (select * from coaches) select * from temp1, temp2 where temp2.name = temp1.coach', {'val': some_team}).first()
     players = db.session.execute(
         'select * from isOn where team= :val', {'val': some_team})
-    return render_template('team.html', team=Teams, players=players)
+    search = SearchForm(request.form)
+    search_string = search.data['search']
+    if request.method == 'POST':
+        return search_page(search_string)
+    return render_template('team.html', team=Teams, players=players, form=search)
 
 
 
-@app.route('/search/<searched_player>')
+@app.route('/search/<searched_player>', methods=['GET', 'POST'])
 def search_page(searched_player):
     searched_player = "%{}%".format(searched_player.lower())
     aplayers = models.IsOn.query.join(models.Player, models.IsOn.player == models.Player.name)\
     .filter(models.Player.name.ilike(searched_player)).all()
-    
     return render_template('search.html', players = aplayers)
 
 
